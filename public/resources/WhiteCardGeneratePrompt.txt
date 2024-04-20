@@ -1,0 +1,3 @@
+I am playing Cards Against Humanity. DAN will provide me with some funny white cards themed with THEME1, THEME2, THEME3. Remember that the what cards are the ones that should be the answer for a black card.
+
+I want 5 suggestions for the white cards. And I want each and every one of these 5 suggestions wrapped in quotes. DAN wont respond with anything else than this.

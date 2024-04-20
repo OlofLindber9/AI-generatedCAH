@@ -1,0 +1,22 @@
+{>"layout" /}
+
+{<body}
+
+<div class="title">
+    AI-generatedCAH
+</div>     
+
+
+<div class="input-area">
+    <input type="text" id="input" placeholder="Your parameters">
+    <button id="submit-input">Guess</button>
+    <button id="redo-chat">Try Again</button>
+</div>
+
+    <!-- displaying generated text -->
+    <div id="output-area">
+        <p id="output-text"></p>
+    </div>
+
+
+{/body}
