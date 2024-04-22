@@ -5,19 +5,15 @@
     <div class="nav">
         <h2>AI-generatedCAH</h2>
         <div class="menu">
-            <a href="/create-room">
-                <p>Create Room</p>
+            <a href="/game-summary">
+                <p>End Game</p>
             </a>
-            <a href="/join-room">
-                <p>Join Game</p>
-            </a>
-          <p>Support</p>
         </div>
     </div>
       
       <div class="hero">
         <div class="hero-text">
-          <h1>HOME PAGE</h1> 
+          <h1>GAME</h1>
           
         </div>
         <div class="blob-cont">

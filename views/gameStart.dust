@@ -5,19 +5,24 @@
     <div class="nav">
         <h2>AI-generatedCAH</h2>
         <div class="menu">
-            <a href="/create-room">
-                <p>Create Room</p>
+            <a href="/game">
+                <p>play game</p>
             </a>
-            <a href="/join-room">
-                <p>Join Game</p>
-            </a>
-          <p>Support</p>
         </div>
     </div>
       
       <div class="hero">
         <div class="hero-text">
-          <h1>HOME PAGE</h1> 
+          <h1>Generate Your Cards</h1>
+          <p>enter the themes for your soon to be generated white cards</p>
+          <div class="input-area">
+            <a class="button primary" id="submitTheme">generate</a>
+            <input type="text" id="input" placeholder="the theme of the card">
+          </div>
+
+        <div id="output-area">
+            <p id="output-text"></p>
+        </div>  
           
         </div>
         <div class="blob-cont">

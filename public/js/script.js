@@ -2,7 +2,7 @@
 document.addEventListener('initComplete', async function() {
 
     var userprompts = 0;
-    const submitButton = document.getElementById("submit-input");
+    const submitButton = document.getElementById("submitTheme");
     const outputArea = document.getElementById("output-text");
 
     submitButton.addEventListener("click", async function() {
