@@ -1,6 +1,5 @@
-document.addEventListener('initComplete', async function() {
+/*const socket = io();
 
-//_____________________SEND AND RECEIVING DATA FROM SERVER (IO SOCKET)_____________________
 socket.on('connect', function() {
     console.log('Connected Client');
 });
@@ -27,5 +26,4 @@ socket.on('gameEvent', function(data) {
 function sendGameEvent(eventData) {
     const roomId = document.getElementById('room-id').value;
     socket.emit('gameEvent', { roomId: roomId, event: eventData });
-}
-});
+}*/

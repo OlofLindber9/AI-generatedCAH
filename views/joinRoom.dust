@@ -14,7 +14,10 @@
       <div class="hero">
         <div class="hero-text">
           <h1>JOIN ROOM</h1>
-              
+          <div class="input-area">
+            <a class="button primary" id="submitTheme">Join Room</a>
+            <input type="text" id="input" placeholder="Enter Room ID">
+          </div>    
         </div>
         <div class="blob-cont">
           <div class="first blob"></div>
@@ -53,3 +56,8 @@
 
 
 {/body}
+
+
+{<scripts}
+    <script type="module" src="/js/joinRoom.js"></script>
+{/scripts}

@@ -62,3 +62,7 @@
 
 
 {/body}
+
+{<scripts}
+    <script type="module" src="/js/gameStart.js"></script>
+{/scripts}

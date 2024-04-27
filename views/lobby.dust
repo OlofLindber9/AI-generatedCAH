@@ -55,3 +55,7 @@
 
 
 {/body}
+
+{<scripts}
+    <script type="module" src="/js/lobby.js"></script>
+{/scripts}

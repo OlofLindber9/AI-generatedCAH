@@ -5,7 +5,7 @@
     <div class="nav">
         <h2>AI-generatedCAH</h2>
         <div class="menu">
-            <a href="/create-room">
+            <a href="/lobby" id="createRoomLink">
                 <p>Create Room</p>
             </a>
             <a href="/join-room">
@@ -57,3 +57,7 @@
 
 
 {/body}
+
+{<scripts}
+    <script type="module" src="/js/homePage.js"></script>
+{/scripts}
