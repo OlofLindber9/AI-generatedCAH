@@ -19,9 +19,26 @@ joinRoomSocket.on('gameEvent', function(data) {
     // Handle game events here
 });
 
+joinRoomSocket.on('roomFull', function(data) {
+    showPopup(`Room ${data} is full`);
+});
+
+joinRoomSocket.on('joinedSuccessfully', function(data){
+    window.location.href = '/lobby';
+});
 function sendGameEvent(eventData) {
     const roomId = sessionStorage.getItem('roomId');
     joinRoomSocket.emit('gameEvent', { roomId: roomId, event: eventData });
+}
+
+function showPopup(text) {
+    var popup = document.getElementById('popup');
+    popup.textContent = text; // Set the text of the popup
+    popup.style.display = 'block'; // Show the popup
+
+    setTimeout(function() {
+        popup.style.display = 'none'; // Hide the popup after 3 seconds
+    }, 3000);
 }
 
 submitButton.addEventListener("click", async function() {
@@ -35,7 +52,7 @@ submitButton.addEventListener("click", async function() {
 
         document.getElementById('input').value = ''; // Clear the input field after sending the request
     } else {
-        //________________________MAKE POPUP THAT SAYS "PLEASE ENTER A ROOM ID"________________________
+        showPopup('Please enter a room ID');
 
     }
 

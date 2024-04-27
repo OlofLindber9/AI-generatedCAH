@@ -10,7 +10,6 @@ async function main() {
       document.dispatchEvent(new Event('initComplete'));
       console.log('initComplete event dispatched');
       }, 500); // Delay in milliseconds
-      console.log('initComplete event dispatched');
     } catch (error) {
       console.error('Error in main function:', error);
     }

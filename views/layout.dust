@@ -14,7 +14,7 @@
     <script src="/socket.io/socket.io.js"></script>
     <script type="module" src="/js/socket.js"></script>
     <script type="/module" src="/js/init.js" defer></script>
-    <script type="/module" src="/js/script.js" defer></script>
+    <!--<script type="/module" src="/js/script.js" defer></script>-->
     {+scripts /}
 <body>
 </html>

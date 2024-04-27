@@ -1,7 +1,12 @@
 const lobbySocket = io();
 lobbySocket.on('connect', function() {
     console.log('Connected to lobby namespace');
-    lobbySocket.emit('joinRoom', sessionStorage.getItem('roomId'));
+    console.log(sessionStorage.getItem('roomId'));
+    if (sessionStorage.getItem('isHost')){
+        lobbySocket.emit('createRoom', sessionStorage.getItem('roomId'));
+    }else{
+        lobbySocket.emit('joinRoom', sessionStorage.getItem('roomId'));
+    }
 });
 
 lobbySocket.on('error', (error) => {

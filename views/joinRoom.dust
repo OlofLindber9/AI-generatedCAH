@@ -24,6 +24,7 @@
           <div class="second blob"></div>
           <div class="third blob"></div>
         </div>
+        <div id="popup" class="popup"></div>
       </div>
       
       

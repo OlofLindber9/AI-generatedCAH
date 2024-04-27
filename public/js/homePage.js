@@ -19,6 +19,10 @@ homeSocket.on('gameEvent', function(data) {
     // Handle game events here
 });
 
+homeSocket.on('roomSuccessfullyCreated', function(data) {
+    window.location.href = '/lobby';
+});
+
 function sendGameEvent(eventData) {
     const roomId = sessionStorage.getItem('roomId');
     homeSocket.emit('gameEvent', { roomId: roomId, event: eventData });
@@ -29,9 +33,7 @@ createRoomLink.addEventListener('click', (e) => {
     e.preventDefault();
     const roomId = Math.random().toString(36).substring(2, 8).toUpperCase();
     console.log(`Generated room ID: ${roomId}`);
-    homeSocket.emit('createRoom', roomId);
     sessionStorage.setItem('roomId', roomId);
-
-    // Navigate to the href attribute of the link
-    //window.location.href = createRoomLink.getAttribute('href');
+    sessionStorage.setItem('isHost', true);
+    homeSocket.emit('createRoom', roomId);
 });
