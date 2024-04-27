@@ -5,6 +5,7 @@
     <div class="nav">
         <h2>AI-generatedCAH</h2>
         <div class="menu">
+          <input type="text" id="nickInput" placeholder="Nickname">
             <a href="/lobby" id="createRoomLink">
                 <p>Create Room</p>
             </a>

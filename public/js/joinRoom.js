@@ -1,4 +1,5 @@
-const submitButton = document.getElementById("submitTheme");
+const submitButton = document.getElementById("submit");
+
 
 const joinRoomSocket = io();
 joinRoomSocket.on('connect', function() {
@@ -23,7 +24,11 @@ joinRoomSocket.on('roomFull', function(data) {
     showPopup(`Room ${data} is full`);
 });
 
-joinRoomSocket.on('joinedSuccessfully', function(data){
+joinRoomSocket.on('roomDoesNotExist', function(data) {
+    showPopup(`Room does not exist`);
+});
+
+joinRoomSocket.on('goToLobby', function(data){
     window.location.href = '/lobby';
 });
 function sendGameEvent(eventData) {
@@ -43,14 +48,18 @@ function showPopup(text) {
 
 submitButton.addEventListener("click", async function() {
     const userInput = document.getElementById("input").value;
-    document.getElementById('input').value = '';
+    const name = document.getElementById("nickNameInput").value;
+
+    if (name.trim() === '') {
+        showPopup('Please enter a name');
+        return;
+    }
 
     if (userInput.trim() !== '') {
+        sessionStorage.setItem('name', name);
         sessionStorage.setItem('roomId', userInput);
         const roomId = sessionStorage.getItem('roomId');
-        joinRoomSocket.emit('joinRoom', roomId);
-
-        document.getElementById('input').value = ''; // Clear the input field after sending the request
+        joinRoomSocket.emit('joinRoom', roomId, name);
     } else {
         showPopup('Please enter a room ID');
 

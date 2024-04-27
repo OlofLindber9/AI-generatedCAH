@@ -17,6 +17,11 @@
       <div class="hero">
         <div class="hero-text">
           <h1>LOBBY</h1>
+            <div id="player-list">
+              <h3>Room ID: <span id="room-id-display"></span></h3>
+              <h3>Players:</h3>
+              <ul id="players"></ul>
+          </div>
         </div>
         <div class="blob-cont">
           <div class="first blob"></div>

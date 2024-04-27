@@ -1,4 +1,5 @@
 const createRoomLink = document.getElementById('createRoomLink');
+const nickname = document.getElementById('nickInput');
 
 const homeSocket = io();
 homeSocket.on('connect', function() {
@@ -33,7 +34,9 @@ createRoomLink.addEventListener('click', (e) => {
     e.preventDefault();
     const roomId = Math.random().toString(36).substring(2, 8).toUpperCase();
     console.log(`Generated room ID: ${roomId}`);
+    const name = nickname.value;
     sessionStorage.setItem('roomId', roomId);
     sessionStorage.setItem('isHost', true);
-    homeSocket.emit('createRoom', roomId);
+    sessionStorage.setItem('name', name);
+    homeSocket.emit('createRoom', roomId, name);
 });

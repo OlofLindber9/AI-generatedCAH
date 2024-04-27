@@ -15,7 +15,8 @@
         <div class="hero-text">
           <h1>JOIN ROOM</h1>
           <div class="input-area">
-            <a class="button primary" id="submitTheme">Join Room</a>
+            <a class="button primary" id="submit">Join Room</a>
+            <input type="text" id="nickNameInput" placeholder="nickname">
             <input type="text" id="input" placeholder="Enter Room ID">
           </div>    
         </div>
