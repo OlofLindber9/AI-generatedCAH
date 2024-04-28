@@ -38,11 +38,11 @@ function sendGameEvent(eventData) {
 
 function showPopup(text) {
     var popup = document.getElementById('popup');
-    popup.textContent = text; // Set the text of the popup
-    popup.style.display = 'block'; // Show the popup
+    popup.textContent = text;
+    popup.style.display = 'block';
 
     setTimeout(function() {
-        popup.style.display = 'none'; // Hide the popup after 3 seconds
+        popup.style.display = 'none';
     }, 3000);
 }
 

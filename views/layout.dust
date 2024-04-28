@@ -6,6 +6,7 @@
     <title>AI-generatedCAH</title>
     <link rel="icon" href="" type="image/x-icon">
     <link rel="stylesheet" href="/css/style.css">
+    {+styles /}
 </head>
 <body>
     <div class="game-container">

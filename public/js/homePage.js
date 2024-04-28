@@ -1,6 +1,4 @@
 const createRoomLink = document.getElementById('createRoomLink');
-const nickname = document.getElementById('nickInput');
-
 const homeSocket = io();
 homeSocket.on('connect', function() {
     console.log('Connected to homepage namespace');
@@ -30,8 +28,12 @@ function sendGameEvent(eventData) {
 }
 
 createRoomLink.addEventListener('click', (e) => {
-    // Prevent the default navigation
+    const nickname = document.getElementById('nickInput').value;
     e.preventDefault();
+    if (nickname.trim() === '') {
+        showPopup('Please enter a nickname');
+        return;
+    }
     const roomId = Math.random().toString(36).substring(2, 8).toUpperCase();
     console.log(`Generated room ID: ${roomId}`);
     const name = nickname.value;
@@ -40,3 +42,13 @@ createRoomLink.addEventListener('click', (e) => {
     sessionStorage.setItem('name', name);
     homeSocket.emit('createRoom', roomId, name);
 });
+
+function showPopup(text) {
+    var popup = document.getElementById('popup');
+    popup.textContent = text;
+    popup.style.display = 'block';
+
+    setTimeout(function() {
+        popup.style.display = 'none';
+    }, 3000);
+}

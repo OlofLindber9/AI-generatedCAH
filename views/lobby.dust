@@ -1,13 +1,14 @@
 {>"layout" /}
 
+{<styles}
+<link rel="stylesheet" href="/css/lobby.css">
+{/styles}
+
 {<body}
 
     <div class="nav">
         <h2>AI-generatedCAH</h2>
         <div class="menu">
-            <a href="/game-start">
-                <p>start Game</p>
-            </a>
             <a href="/">
                 <p>leave the game</p>
             </a>
@@ -23,6 +24,9 @@
               <ul id="players"></ul>
           </div>
         </div>
+        <a href="/game-start" id="start-game-button" class="button">
+          <p>start Game</p>
+        </a>
         <div class="blob-cont">
           <div class="first blob"></div>
           <div class="second blob"></div>

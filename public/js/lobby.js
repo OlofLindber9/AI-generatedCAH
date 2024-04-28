@@ -1,4 +1,17 @@
 const lobbySocket = io();
+const startGameButton = document.getElementById('start-game-button');
+
+if (!sessionStorage.getItem('isHost')) {
+    startGameButton.classList.add('disabled');
+    startGameButton.removeAttribute('href'); // Disable link for non-hosts
+} else {
+    startGameButton.addEventListener('click', (event) => {
+        lobbySocket.emit('startGameRequest', { roomId: sessionStorage.getItem('roomId') });
+        event.preventDefault();
+        window.location.href = '/game-start';
+    });
+}
+
 lobbySocket.on('connect', function() {
     console.log('Connected to lobby namespace');
     console.log(sessionStorage.getItem('roomId'));
@@ -37,6 +50,10 @@ lobbySocket.on('updatePlayerList', function(players) {
 });
 
 lobbySocket.emit('requestPlayerList', { roomId: sessionStorage.getItem('roomId') });
+
+lobbySocket.on('redirectToGameStart', function() {
+    window.location.href = '/game-start';
+});
 
 function sendGameEvent(eventData) {
     const roomId = sessionStorage.getItem('roomId');
