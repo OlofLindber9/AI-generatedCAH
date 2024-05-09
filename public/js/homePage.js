@@ -2,6 +2,7 @@ const createRoomLink = document.getElementById('createRoomLink');
 const homeSocket = io();
 homeSocket.on('connect', function() {
     console.log('Connected to homepage namespace');
+    console.log(`Name: ${sessionStorage.getItem('name')}`);
 });
 
 homeSocket.on('error', (error) => {
@@ -36,11 +37,10 @@ createRoomLink.addEventListener('click', (e) => {
     }
     const roomId = Math.random().toString(36).substring(2, 8).toUpperCase();
     console.log(`Generated room ID: ${roomId}`);
-    const name = nickname.value;
     sessionStorage.setItem('roomId', roomId);
     sessionStorage.setItem('isHost', true);
-    sessionStorage.setItem('name', name);
-    homeSocket.emit('createRoom', roomId, name);
+    sessionStorage.setItem('name', nickname);
+    homeSocket.emit('createRoom', roomId, nickname);
 });
 
 function showPopup(text) {

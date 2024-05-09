@@ -1,7 +1,5 @@
 var userprompts = 0;
 const submitButton = document.getElementById("submitTheme");
-const outputArea = document.getElementById("output-text");
-
 
 
 const gameStartSocket = io();
@@ -38,25 +36,30 @@ submitButton.addEventListener("click", async function() {
     document.getElementById('input').value = '';
 
     if (userInput.trim() !== '') {
-        outputArea.innerText = 'Please wait, generating response...';
+
+        const aiphrases = [];
 
         // Call the function and handle the response
         generateWhiteCards(userInput).then(data => {
             if (data) {
-                outputArea.innerText = data.aiResponse;
+                console.log("we lit");
+                const lines = data.aiResponse.split('\n');
+                console.log("weeelit");
+                lines.forEach(line => {
+                    if (line.trim() !== ''){
+                        aiphrases.push(line.trim());
+                    }
+                });
+                displayCards(aiphrases); 
             }
         }).catch(error => {
-            outputArea.innerText = 'Error: Could not retrieve the response.';
+            console.error('Error:', error);
         });
         userprompts++;
-
-
-        document.getElementById('input').value = ''; // Clear the input field after sending the request
-    } else {
-        outputArea.innerText = 'Please enter some text to generate output.';
+        document.getElementById('input').value = '';
+        };
     }
-
-});
+);
 
 async function generateWhiteCards(promptText) {
 const endpoint = '/generateWhiteCard';
@@ -79,4 +82,23 @@ try {
 } catch (error) {
     console.error('There was an error!', error);
 }
+}
+
+function displayCards(aiphrases) {
+    const container = document.getElementById('card-container');
+    
+    aiphrases.forEach((phrase) => {
+        const card = document.createElement('div');
+        card.classList.add('card');
+        card.textContent = phrase;
+        container.appendChild(card);
+    });  
+    Array.from(container.children).forEach((card, index) => {
+        setTimeout(() => {
+            requestAnimationFrame(() => {
+                card.style.opacity = 1; 
+                card.style.transform = 'translateX(0px)';
+            });
+        }, index * 500);
+    });
 }

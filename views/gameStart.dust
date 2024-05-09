@@ -19,11 +19,10 @@
             <a class="button primary" id="submitTheme">generate</a>
             <input type="text" id="input" placeholder="the theme of the card">
           </div>
-
-        <div id="output-area">
-            <p id="output-text"></p>
-        </div>  
-          
+                  
+        </div>
+        <div id="card-container">
+          <!-- Cards will be dynamically added here -->
         </div>
         <div class="blob-cont">
           <div class="first blob"></div>
