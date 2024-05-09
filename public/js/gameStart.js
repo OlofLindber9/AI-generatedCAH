@@ -37,22 +37,33 @@ submitButton.addEventListener("click", async function() {
 
     if (userInput.trim() !== '') {
 
+        var btn = this;
+        var textSpan = btn.querySelector('span');
+        textSpan.style.display = 'none';
+
+        var spinner = document.createElement('div');
+        spinner.className = 'loader';
+        btn.appendChild(spinner); 
+
         const aiphrases = [];
 
-        // Call the function and handle the response
         generateWhiteCards(userInput).then(data => {
             if (data) {
-                console.log("we lit");
                 const lines = data.aiResponse.split('\n');
-                console.log("weeelit");
                 lines.forEach(line => {
                     if (line.trim() !== ''){
                         aiphrases.push(line.trim());
                     }
                 });
+                btn.removeChild(spinner);
+                //spinner.remove();
+                textSpan.style.display = '';
                 displayCards(aiphrases); 
             }
         }).catch(error => {
+            btn.removeChild(spinner);
+            //spinner.remove();
+            textSpan.style.display = '';
             console.error('Error:', error);
         });
         userprompts++;

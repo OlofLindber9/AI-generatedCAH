@@ -1,5 +1,10 @@
 {>"layout" /}
 
+{<styles}
+<link rel="stylesheet" href="/css/gameStart.css">
+{/styles}
+
+
 {<body}
 
     <div class="nav">
@@ -16,7 +21,7 @@
           <h1>Generate Your Cards</h1>
           <p>enter the themes for your soon to be generated white cards</p>
           <div class="input-area">
-            <a class="button primary" id="submitTheme">generate</a>
+            <a class="button primary" id="submitTheme"><span>generate</span></a>
             <input type="text" id="input" placeholder="the theme of the card">
           </div>
                   
