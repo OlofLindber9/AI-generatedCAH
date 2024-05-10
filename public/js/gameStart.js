@@ -101,7 +101,22 @@ function displayCards(aiphrases) {
     aiphrases.forEach((phrase) => {
         const card = document.createElement('div');
         card.classList.add('card');
-        card.textContent = phrase;
+        const border = document.createElement('div');
+        border.classList.add('border');
+        card.appendChild(border);
+        const filter = document.createElement('div');
+        filter.classList.add('filter');
+        card.appendChild(filter);
+        const text = document.createElement('p');
+        text.classList.add('p');
+        text.textContent = phrase;
+        card.appendChild(text);
+        const shadow = document.createElement('div');
+        shadow.classList.add('shadow');
+        card.appendChild(shadow);
+        const backdrop = document.createElement('div');
+        backdrop.classList.add('backdrop');
+        card.appendChild(backdrop);
         container.appendChild(card);
     });  
     Array.from(container.children).forEach((card, index) => {

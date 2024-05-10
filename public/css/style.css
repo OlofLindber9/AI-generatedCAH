@@ -6,6 +6,13 @@
 --blob: #ffffff;
 --blob2:#F0DBA5;
 --blob3: #5c5c5c;
+--card-grd1: #3d3d3d;
+--card-grd2: #0a0a0a;
+--border-grd1: #929292;
+--border-grd2: #242424;
+--radial-center: rgba(152, 149, 168, 0.3);
+--radial-edge: rgba(22, 22, 22, 0.3);
+--shadow: rgba(136, 136, 136, 0.5);
 }
 
 
@@ -263,31 +270,3 @@ body {
     margin: 1em;
 }
 }
-
-@keyframes slideInFromRight {
-    0% {
-      transform: translateX(100%);
-      opacity: 0;
-    }
-    100% {
-      transform: translateX(0);
-      opacity: 1;
-    }
-  }
-
-.card {
-    width: 300px;
-    height: 150px;
-    background-color: #fff;
-    border-radius: 10px;
-    box-shadow: 0 4px 8px rgba(0,0,0,0.1);
-    margin: 10px;
-    padding: 20px;
-    font-size: 16px;
-    text-align: center;
-    display: inline-block;
-    opacity: 0;
-    transform: translateX(100%);
-    transition: opacity 0.5s ease-out, transform 0.5s ease-out;
-  }
-  
