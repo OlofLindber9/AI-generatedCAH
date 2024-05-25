@@ -108,7 +108,7 @@ function displayCards(aiphrases) {
         filter.classList.add('filter');
         card.appendChild(filter);
         const text = document.createElement('p');
-        text.classList.add('p');
+        text.classList.add('pinv');
         text.textContent = phrase;
         card.appendChild(text);
         const shadow = document.createElement('div');

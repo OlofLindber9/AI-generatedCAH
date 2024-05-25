@@ -1,4 +1,20 @@
-
+:root {
+    --bg: #000000;
+    --text: #ada8a8;
+    --darktext:#2c2b2b;
+    --invText: #000000;
+    --blob: #ffffff;
+    --blob2:#F0DBA5;
+    --blob3: #5c5c5c;
+    --card-grd1: #888888;
+    --card-grd2: #424242;
+    --border-grd1: #b3b3b3;
+    --border-grd2: #4e4e4e;
+    --radial-center: rgba(219, 219, 219, 0.3);
+    --radial-edge: rgba(119, 119, 119, 0.3);
+    --shadow: rgba(39, 39, 39, 0.5);
+    }
+    
 .loader {
     width: 32px;
     aspect-ratio: 1;
@@ -97,7 +113,7 @@
     height: 100%;
     background: radial-gradient(circle at top, var(--radial-center), var(--radial-edge)), linear-gradient(135deg, var(--card-grd1), var(--card-grd2));
     z-index: 0;
-    border-radius: 20px;
+    border-radius: 10px;
     opacity: 30%;
     transition: all ease 0.3s;
   }
@@ -164,7 +180,7 @@
     height: 70px;
     background: radial-gradient(circle at top, var(--radial-center), var(--radial-edge)), linear-gradient(135deg, var(--card-grd1), var(--card-grd2));
     z-index: -2;
-    border-radius: 20px;
+    border-radius: 10px;
     opacity: 20%;
     transition: all ease 0.3s;
   }
@@ -174,7 +190,7 @@
     height: 100px;
     background: radial-gradient(circle at top, var(--radial-center), var(--radial-edge)), linear-gradient(135deg, var(--card-grd1), var(--card-grd2));
     z-index: -2;
-    border-radius: 33px;
+    border-radius: 10px;
     opacity: 20%;
     transition: all ease 0.3s;
   }

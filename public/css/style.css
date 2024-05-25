@@ -3,6 +3,7 @@
 --bg: #000000;
 --text: #ada8a8;
 --invText: #000000;
+--darktext:#2c2b2b;
 --blob: #ffffff;
 --blob2:#F0DBA5;
 --blob3: #5c5c5c;
@@ -49,6 +50,17 @@ font-size: 20px;
 color: var(--text);
 }
 
+.pdark 
+{
+    font-size: 20px;
+    color: var(--darktext);
+}
+
+.pinv 
+{
+    font-size: 20px;
+    color: var(--invText);
+}
 a {
 text-decoration: none;
 color: inherit;

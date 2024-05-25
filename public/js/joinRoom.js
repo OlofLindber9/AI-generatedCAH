@@ -46,6 +46,19 @@ function showPopup(text) {
     }, 3000);
 }
 
+function createPlayer(nickname, cards, score, isCzar, isHost) {
+    fetch('/createPlayer', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({ nickname, cards, score, isCzar, isHost })
+    })
+    .then(response => response.json())
+    .then(data => console.log('Player created:', data))
+    .catch(error => console.error('Error creating player:', error));
+}
+
 submitButton.addEventListener("click", async function() {
     const userInput = document.getElementById("input").value;
     const name = document.getElementById("nickNameInput").value;
@@ -60,6 +73,7 @@ submitButton.addEventListener("click", async function() {
         sessionStorage.setItem('roomId', userInput);
         const roomId = sessionStorage.getItem('roomId');
         joinRoomSocket.emit('joinRoom', roomId, name);
+        createPlayer(name, [], 0, false, false);
     } else {
         showPopup('Please enter a room ID');
 

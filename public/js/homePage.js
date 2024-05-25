@@ -28,6 +28,19 @@ function sendGameEvent(eventData) {
     homeSocket.emit('gameEvent', { roomId: roomId, event: eventData });
 }
 
+function createPlayer(nickname, cards, score, isCzar, isHost) {
+    fetch('/createPlayer', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({ nickname, cards, score, isCzar, isHost })
+    })
+    .then(response => response.json())
+    .then(data => console.log('Player created:', data))
+    .catch(error => console.error('Error creating player:', error));
+}
+
 createRoomLink.addEventListener('click', (e) => {
     const nickname = document.getElementById('nickInput').value;
     e.preventDefault();
@@ -41,6 +54,7 @@ createRoomLink.addEventListener('click', (e) => {
     sessionStorage.setItem('isHost', true);
     sessionStorage.setItem('name', nickname);
     homeSocket.emit('createRoom', roomId, nickname);
+    createPlayer(nickname, [], 0, false, true);
 });
 
 function showPopup(text) {
