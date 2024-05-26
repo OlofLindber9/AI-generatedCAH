@@ -29,7 +29,7 @@ joinRoomSocket.on('roomDoesNotExist', function(data) {
 });
 
 joinRoomSocket.on('goToLobby', function(data){
-    //window.location.href = '/lobby';
+    window.location.href = '/lobby';
 });
 function sendGameEvent(eventData) {
     const roomId = sessionStorage.getItem('roomId');
