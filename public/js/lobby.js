@@ -41,7 +41,7 @@ lobbySocket.on('gameEvent', function(data) {
 lobbySocket.on('updatePlayerList', function(players) {
     const playerListElement = document.getElementById('players');
     playerListElement.innerHTML = '';
-
+    
     players.forEach(player => {
         const playerElement = document.createElement('li');
         playerElement.textContent = player.name;

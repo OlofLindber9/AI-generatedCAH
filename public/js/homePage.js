@@ -1,4 +1,5 @@
 const createRoomLink = document.getElementById('createRoomLink');
+const TESTBUTTON = document.getElementById("rulesLink");
 const homeSocket = io();
 homeSocket.on('connect', function() {
     console.log('Connected to homepage namespace');
@@ -28,19 +29,6 @@ function sendGameEvent(eventData) {
     homeSocket.emit('gameEvent', { roomId: roomId, event: eventData });
 }
 
-function createPlayer(nickname, cards, score, isCzar, isHost) {
-    fetch('/createPlayer', {
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/json'
-        },
-        body: JSON.stringify({ nickname, cards, score, isCzar, isHost })
-    })
-    .then(response => response.json())
-    .then(data => console.log('Player created:', data))
-    .catch(error => console.error('Error creating player:', error));
-}
-
 createRoomLink.addEventListener('click', (e) => {
     const nickname = document.getElementById('nickInput').value;
     e.preventDefault();
@@ -53,8 +41,24 @@ createRoomLink.addEventListener('click', (e) => {
     sessionStorage.setItem('roomId', roomId);
     sessionStorage.setItem('isHost', true);
     sessionStorage.setItem('name', nickname);
-    homeSocket.emit('createRoom', roomId, nickname);
-    createPlayer(nickname, [], 0, false, true);
+    createPlayer(nickname, [], 0, false, true, "none")
+        .then(data => {
+            const playerID = data.playerID;
+            sessionStorage.setItem('playerID', playerID);
+            createLobby(roomId, [playerID], { gameState: "AWAITING START" })
+            .then(data => {
+                const lobbyID = data.id;
+                sessionStorage.setItem('lobbyID', lobbyID);
+                updatePlayer(playerID, 'lobbyId', lobbyID);
+                homeSocket.emit('createRoom', roomId, nickname);
+            })
+            .catch(error => console.error('Error creating lobby:', error));
+        })
+    .catch(error => console.error('Error creating player:', error));
+});
+
+TESTBUTTON.addEventListener('click', (e) => {
+    console.log(roomId);
 });
 
 function showPopup(text) {
@@ -65,4 +69,61 @@ function showPopup(text) {
     setTimeout(function() {
         popup.style.display = 'none';
     }, 3000);
+}
+
+
+async function createLobby(lobbyId, players, gameDetails) {
+    try {
+        const response = await fetch('/createLobby', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({ lobbyId, players, gameDetails })
+        });
+
+        const data = await response.json();
+        return data;  // Return the data received from the server
+    }
+    catch (error) {
+        console.error('Error creating lobby:', error);
+        throw error;
+    }
+}
+
+async function createPlayer(nickname, cards, score, isCzar, isHost, lobbyId) {
+    try {
+        const response = await fetch('/createPlayer', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({ nickname, cards, score, isCzar, isHost, lobbyId })
+        });
+
+        const data = await response.json();
+        return data;  // Return the data received from the server
+    } catch (error) {
+        console.error('Error creating player:', error);
+        throw error;
+    }
+}
+
+async function updatePlayer(playerId, field, value) {
+    try {
+        const response = await fetch('/updatePlayer', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({ playerId, field, value })
+        });
+
+        const data = await response.json();
+        console.log(data.message);
+        return data;
+    } catch (error) {
+        console.error('Error updating player:', error);
+        throw error;
+    }
 }

@@ -12,7 +12,9 @@
             <a href="/join-room">
                 <p>Join Game</p>
             </a>
-          <p>Support</p>
+            <a id="rulesLink">
+                <p>Rules</p>
+            </a>
         </div>
     </div>
       
