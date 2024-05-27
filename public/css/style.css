@@ -3,6 +3,7 @@
 --bg: #000000;
 --text: #ada8a8;
 --invText: #000000;
+--lightdark: #2e2e2e;
 --darktext:#2c2b2b;
 --blob: #ffffff;
 --blob2:#F0DBA5;
@@ -43,6 +44,10 @@ color: var(--text);
 h2 {
 font-size: 32px;
 color: var(--text);
+}
+
+h2:hover {
+    color: var(--lightdark);
 }
 
 p {

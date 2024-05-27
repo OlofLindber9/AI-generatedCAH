@@ -68,6 +68,12 @@
     transform: translateX(100%);
     transition: opacity 0.5s ease-out, transform 0.5s ease-out;
   }
+
+  .card.selected {
+    border: 2px solid rgb(222, 222, 233);
+    transform: scale(1.05);
+}
+
   .card > p {
     text-align: center;
   }
@@ -195,3 +201,13 @@
     transition: all ease 0.3s;
   }
   
+  .button.disabled {
+    background-color: #ada8a8;
+    pointer-events: none;
+    color: #666;
+}
+
+  .button {
+    background-color: #ada8a8;
+    color: #000000;
+  }

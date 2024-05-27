@@ -3,16 +3,17 @@
 {<body}
 
     <div class="nav">
-        <h2>AI-generatedCAH</h2>
+        <h2 id="escapeHatch">AI-generatedCAH</h2>
         <div class="menu">
-            <a href="/lobby">
-                <p>join</p>
+            <a>
+                <p>menu buttons here</p>
             </a>
         </div>
     </div>
       
       <div class="hero">
         <div class="hero-text">
+          <a href="/"><h2>← back</h2></a>
           <h1>JOIN ROOM</h1>
           <div class="input-area">
             <a class="button primary" id="submit">Join Room</a>

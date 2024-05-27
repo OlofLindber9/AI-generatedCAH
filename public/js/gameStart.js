@@ -1,5 +1,12 @@
 var userprompts = 0;
+const cards = [];
+let cardListenersActive = true;
+const selectedCards = []; // Global array to keep track of selected cards
 const submitButton = document.getElementById("submitTheme");
+const startGameButton = document.getElementById('startGame');
+const selectCards = document.getElementById('selectCards');
+selectCards.classList.add("disabled");
+const amountSelectedCards = document.getElementById('amountSelected');
 
 
 const gameStartSocket = io();
@@ -95,6 +102,28 @@ try {
 }
 }
 
+function handleCardClick(card) {
+    if (!cardListenersActive) {
+        return;
+    }
+        const index = selectedCards.indexOf(card);
+        if (index > -1) {
+            // Card is already selected, remove it
+            selectedCards.splice(index, 1);
+            card.classList.remove('selected');
+        } else if (selectedCards.length < 2) {
+            // Add new card to the selection if less than 2 are selected
+            selectedCards.push(card);
+            card.classList.add('selected');
+        }
+        amountSelectedCards.innerText = `${selectedCards.length}/2 selected`;
+        if (selectedCards.length === 2) {
+            selectCards.classList.remove('disabled');
+        } else {
+            selectCards.classList.add('disabled');
+        }
+    };
+
 function displayCards(aiphrases) {
     const container = document.getElementById('card-container');
     
@@ -118,6 +147,8 @@ function displayCards(aiphrases) {
         backdrop.classList.add('backdrop');
         card.appendChild(backdrop);
         container.appendChild(card);
+        cards.push(card);
+        card.addEventListener('click', () => handleCardClick(card));
     });  
     Array.from(container.children).forEach((card, index) => {
         setTimeout(() => {
@@ -127,4 +158,73 @@ function displayCards(aiphrases) {
             });
         }, index * 500);
     });
+}
+
+startGameButton.addEventListener('click', async () => {
+    const selectedPhrases = selectedCards.map(card => card.textContent);
+    const playerID = sessionStorage.getItem('playerID');
+    console.log(playerID);
+
+    for (const phrase of selectedPhrases) {
+        try {
+            const createCardResponse = await createCard(phrase, playerID);
+            console.log(createCardResponse);
+            console.log(createCardResponse.id);
+            const addCardToPlayerResponse = await addCardToPlayer(playerID, createCardResponse.id);
+            console.log(addCardToPlayerResponse);
+        } catch (error) {
+            console.error('Error:', error);
+        }
+    }
+});
+
+selectCards.addEventListener('click', () => {
+    cards.forEach(card => {
+        if (card !== selectedCards[0] && card !== selectedCards[1]) {
+            card.style.opacity = 0;
+            card.style.transform = 'translateX(-100px)';
+        } else {
+            card.style.transform = 'translateX(0px)';
+        }
+        cardListenersActive = false;
+        console.log("event removed")
+    });
+    });
+
+
+
+async function createCard(text, creator) {
+    try {
+        const response = await fetch('/createCard', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({ text, creator })
+        });
+
+        const data = await response.json();
+        return data;  // Return the data received from the server
+    } catch (error) {
+        console.error('Error creating player:', error);
+        throw error;
+    }
+}
+
+async function addCardToPlayer(playerID, cardID) {
+    try {
+        const response = await fetch('/addCardToPlayer', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({ playerID, cardID })
+        });
+
+        const data = await response.json();
+        return data;  // Return the data received from the server
+    } catch (error) {
+        console.error('Error creating player:', error);
+        throw error;
+    }
 }

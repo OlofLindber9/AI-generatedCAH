@@ -1,4 +1,5 @@
 const submitButton = document.getElementById("submit");
+const escapeHatch = document.getElementById("escapeHatch");
 
 
 const joinRoomSocket = io();
@@ -139,4 +140,8 @@ submitButton.addEventListener("click", async function() {
 
     }
 
+});
+
+escapeHatch.addEventListener("click", function() {
+    window.location.href = '/';
 });

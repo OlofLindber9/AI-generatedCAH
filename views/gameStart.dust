@@ -10,7 +10,7 @@
     <div class="nav">
         <h2>AI-generatedCAH</h2>
         <div class="menu">
-            <a href="/game">
+            <a id="startGame">
                 <p>play game</p>
             </a>
         </div>
@@ -23,6 +23,10 @@
           <div class="input-area">
             <a class="button primary" id="submitTheme"><span>generate</span></a>
             <input type="text" id="input" placeholder="the theme of the card">
+          </div>
+        <div class="input-area">
+            <a class="button" id="selectCards"><span>select cards</span></a>
+            <p id="amountSelected"> 0/2 selected</p>
           </div>
                   
         </div>
