@@ -1,6 +1,7 @@
 var userprompts = 0;
 const cards = [];
 let cardListenersActive = true;
+let cardsGenerated = false;
 const selectedCards = []; // Global array to keep track of selected cards
 const submitButton = document.getElementById("submitTheme");
 const startGameButton = document.getElementById('startGame');
@@ -39,6 +40,10 @@ function sendGameEvent(eventData) {
 }
 
 submitButton.addEventListener("click", async function() {
+    if (cardsGenerated) {
+        showPopup('You have already generated cards');
+        return;
+    }
     const userInput = document.getElementById("input").value;
     document.getElementById('input').value = '';
 
@@ -74,6 +79,7 @@ submitButton.addEventListener("click", async function() {
             console.error('Error:', error);
         });
         userprompts++;
+        cardsGenerated = true;
         document.getElementById('input').value = '';
         };
     }
@@ -179,13 +185,27 @@ startGameButton.addEventListener('click', async () => {
 });
 
 selectCards.addEventListener('click', () => {
+    var selectedCardNumebr = 0;
     cards.forEach(card => {
         if (card !== selectedCards[0] && card !== selectedCards[1]) {
             card.style.opacity = 0;
             card.style.transform = 'translateX(-100px)';
         } else {
-            card.style.transform = 'translateX(0px)';
-        }
+            selectedCardNumebr++;
+            if (card === cards[0] && selectedCardNumebr === 1){
+                card.style.transform = 'translateY(13.60em)';
+            }  else if (card === cards[1] && selectedCardNumebr === 1){
+                card.style.transform = 'translateY(13.60em) translateX(-23em)';
+            } else if (card === cards[1] && selectedCardNumebr === 2){
+                card.style.transform = 'translateY(13.60em)';
+            } else if (card === cards[2] && selectedCardNumebr === 2){
+                card.style.transform = 'translateX(23em)';
+            }else if (card === cards[3] && selectedCardNumebr === 1){
+                card.style.transform = 'translateX(-23em)';
+            } else if (card === cards[4]){
+                card.style.transform = 'translateY(-13.60em) translateX(23em)';
+            }
+    }
         cardListenersActive = false;
         console.log("event removed")
     });
@@ -227,4 +247,14 @@ async function addCardToPlayer(playerID, cardID) {
         console.error('Error creating player:', error);
         throw error;
     }
+}
+
+function showPopup(text) {
+    var popup = document.getElementById('popup');
+    popup.textContent = text;
+    popup.style.display = 'block';
+
+    setTimeout(function() {
+        popup.style.display = 'none';
+    }, 3000);
 }

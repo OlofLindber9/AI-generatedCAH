@@ -67,6 +67,7 @@
     opacity: 0;
     transform: translateX(100%);
     transition: opacity 0.5s ease-out, transform 0.5s ease-out;
+    border: 2px solid rgba(222, 222, 233, 0);
   }
 
   .card.selected {
