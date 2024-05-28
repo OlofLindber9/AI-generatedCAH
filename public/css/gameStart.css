@@ -70,6 +70,14 @@
     border: 2px solid rgba(222, 222, 233, 0);
   }
 
+  .card.slow-transition {
+    transition: transform 4s ease-out;
+}
+
+.card.fast-transition {
+    transition: transform 0.5s ease-in;
+}
+
   .card.selected {
     border: 2px solid rgb(222, 222, 233);
     transform: scale(1.05);
@@ -210,5 +218,10 @@
 
   .button {
     background-color: #ada8a8;
+    color: #000000;
+  }
+
+  .button.green {
+    background-color: #7db16d;
     color: #000000;
   }

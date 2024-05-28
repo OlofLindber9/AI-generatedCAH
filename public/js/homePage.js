@@ -41,7 +41,7 @@ createRoomLink.addEventListener('click', (e) => {
     sessionStorage.setItem('roomId', roomId);
     sessionStorage.setItem('isHost', true);
     sessionStorage.setItem('name', nickname);
-    createPlayer(nickname, [], 0, false, true, "none")
+    createPlayer(nickname, [], 0, false, true, "none", "AWAITING START")
         .then(data => {
             const playerID = data.playerID;
             sessionStorage.setItem('playerID', playerID);
@@ -91,14 +91,14 @@ async function createLobby(lobbyId, players, gameDetails) {
     }
 }
 
-async function createPlayer(nickname, cards, score, isCzar, isHost, lobbyId) {
+async function createPlayer(nickname, cards, score, isCzar, isHost, lobbyId, status) {
     try {
         const response = await fetch('/createPlayer', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'
             },
-            body: JSON.stringify({ nickname, cards, score, isCzar, isHost, lobbyId })
+            body: JSON.stringify({ nickname, cards, score, isCzar, isHost, lobbyId, status })
         });
 
         const data = await response.json();

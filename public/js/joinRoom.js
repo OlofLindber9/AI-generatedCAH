@@ -47,14 +47,14 @@ function showPopup(text) {
     }, 3000);
 }
 
-async function createPlayer(nickname, cards, score, isCzar, isHost, lobbyId) {
+async function createPlayer(nickname, cards, score, isCzar, isHost, lobbyId, status) {
     try {
         const response = await fetch('/createPlayer', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'
             },
-            body: JSON.stringify({ nickname, cards, score, isCzar, isHost, lobbyId })
+            body: JSON.stringify({ nickname, cards, score, isCzar, isHost, lobbyId, status })
         });
 
         const data = await response.json();
@@ -119,7 +119,7 @@ submitButton.addEventListener("click", async function() {
             if (data) {
                 const lobbyId = data.lobby;
                 console.log('lobbyID:', lobbyId);
-                createPlayer(name, [], 0, false, false, lobbyId).then(data => {
+                createPlayer(name, [], 0, false, false, lobbyId, "AWAITING START").then(data => {
                     const playerId = data.playerID;
                     sessionStorage.setItem('playerID', playerId);
                     addPlayerToLobby(lobbyId, playerId).then(data => {

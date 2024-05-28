@@ -1,6 +1,8 @@
 const lobbySocket = io();
 const startGameButton = document.getElementById('start-game-button');
 
+//___________________________________________FIX STATUS IN LOBBY______READY/AWAITING START___________________________FOR BOTH PLAYERS AND LOBBY
+
 if (!sessionStorage.getItem('isHost')) {
     startGameButton.classList.add('disabled');
     startGameButton.removeAttribute('href'); // Disable link for non-hosts
@@ -41,7 +43,7 @@ lobbySocket.on('gameEvent', function(data) {
 lobbySocket.on('updatePlayerList', function(players) {
     const playerListElement = document.getElementById('players');
     playerListElement.innerHTML = '';
-    
+
     players.forEach(player => {
         const playerElement = document.createElement('li');
         playerElement.textContent = player.name;

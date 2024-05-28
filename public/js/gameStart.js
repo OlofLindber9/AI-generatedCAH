@@ -167,9 +167,30 @@ function displayCards(aiphrases) {
 }
 
 startGameButton.addEventListener('click', async () => {
-    const selectedPhrases = selectedCards.map(card => card.textContent);
+
     const playerID = sessionStorage.getItem('playerID');
+    const selectedPhrases = selectedCards.map(card => card.textContent);
     console.log(playerID);
+
+    if (selectedCards.length !== 2) {
+        showPopup('You must select 2 cards');
+        return;
+    }
+
+    if (startGameButton.classList.contains('green')) {
+        startGameButton.classList.remove('green');
+        updatePlayer(playerID, 'status', 'GENERATING CARDS')
+        for (const card of selectedCards) {
+            card.classList.add('slow-transition');
+            card.style.transform = 'translateX(-50em)';
+        }
+        return;
+    }
+    for (const card of selectedCards) {
+        card.classList.add('slow-transition');
+        card.style.transform = 'translateX(50em)';
+    }
+    startGameButton.classList.add('green');
 
     for (const phrase of selectedPhrases) {
         try {
@@ -182,6 +203,7 @@ startGameButton.addEventListener('click', async () => {
             console.error('Error:', error);
         }
     }
+    updatePlayer(playerID, 'status', 'GENERATING CARDS COMPLETED')
 });
 
 selectCards.addEventListener('click', () => {
@@ -245,6 +267,25 @@ async function addCardToPlayer(playerID, cardID) {
         return data;  // Return the data received from the server
     } catch (error) {
         console.error('Error creating player:', error);
+        throw error;
+    }
+}
+
+async function updatePlayer(playerId, field, value) {
+    try {
+        const response = await fetch('/updatePlayer', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({ playerId, field, value })
+        });
+
+        const data = await response.json();
+        console.log(data.message);
+        return data;
+    } catch (error) {
+        console.error('Error updating player:', error);
         throw error;
     }
 }
