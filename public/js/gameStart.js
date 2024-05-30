@@ -166,8 +166,18 @@ function displayCards(aiphrases) {
     });
 }
 
-startGameButton.addEventListener('click', async () => {
+function emToPixels(elem, em) {
+    return em * parseFloat(getComputedStyle(elem).fontSize);
+}
 
+function moveElement(element, translateXEm) {
+    const translateXPixels = emToPixels(element, translateXEm);
+    requestAnimationFrame(() => {
+        element.style.left = `${translateXPixels}px`;
+    });
+}
+
+startGameButton.addEventListener('click', async () => {
     const playerID = sessionStorage.getItem('playerID');
     const selectedPhrases = selectedCards.map(card => card.textContent);
     console.log(playerID);
@@ -181,14 +191,14 @@ startGameButton.addEventListener('click', async () => {
         startGameButton.classList.remove('green');
         updatePlayer(playerID, 'status', 'GENERATING CARDS')
         for (const card of selectedCards) {
-            card.classList.add('slow-transition');
-            card.style.transform = 'translateX(-50em)';
+            moveElement(card, -25);
+            console.log("moved left");
         }
         return;
     }
     for (const card of selectedCards) {
-        card.classList.add('slow-transition');
-        card.style.transform = 'translateX(50em)';
+        moveElement(card, 55);
+        console.log("moved right");
     }
     startGameButton.classList.add('green');
 
