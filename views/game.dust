@@ -1,5 +1,9 @@
 {>"layout" /}
 
+{<styles}
+<link rel="stylesheet" href="/css/game.css">
+{/styles}
+
 {<body}
 
     <div class="nav">
@@ -14,7 +18,6 @@
       <div class="hero">
         <div class="hero-text">
           <h1>GAME</h1>
-          
         </div>
         <div class="blob-cont">
           <div class="first blob"></div>
@@ -22,6 +25,46 @@
           <div class="third blob"></div>
         </div>
       </div>
+
+      <ul class="hand">
+        <li>
+            <a class="card" href="#">
+            </a>
+        </li>
+        <li>
+            <a class="card" href="#">
+            </a>
+        </li>
+        <li>
+            <a class="card" href="#">
+            </a>
+        </li>
+        <li>
+            <a class="card" href="#">
+            </a>
+        </li>
+        <li>
+            <a class="card" href="#">
+            </a>
+        </li>
+        <li>
+            <a class="card" href="#">
+            </a>
+        </li>
+        <li>
+            <a class="card" href="#">
+            </a>
+        </li>
+        <li>
+            <a class="card" href="#">
+            </a>
+        </li>
+        <li>
+            <a class="card" href="#">
+            </a>
+        </li>
+
+    </ul>
       
       
       
@@ -53,3 +96,7 @@
 
 
 {/body}
+
+{<scripts}
+    <script type="module" src="/js/game.js"></script>
+{/scripts}

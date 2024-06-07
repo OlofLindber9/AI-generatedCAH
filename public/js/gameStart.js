@@ -1,6 +1,7 @@
 var userprompts = 0;
 const cards = [];
 let cardListenersActive = true;
+let cardsSelected = false;
 let cardsGenerated = false;
 const selectedCards = []; // Global array to keep track of selected cards
 const submitButton = document.getElementById("submitTheme");
@@ -178,6 +179,10 @@ function moveElement(element, translateXEm) {
 }
 
 startGameButton.addEventListener('click', async () => {
+    if (!cardsSelected) {
+        showPopup('You must select 2 cards');
+        return;
+    }
     const playerID = sessionStorage.getItem('playerID');
     const selectedPhrases = selectedCards.map(card => card.textContent);
     console.log(playerID);
@@ -191,14 +196,12 @@ startGameButton.addEventListener('click', async () => {
         startGameButton.classList.remove('green');
         updatePlayer(playerID, 'status', 'GENERATING CARDS')
         for (const card of selectedCards) {
-            moveElement(card, -25);
-            console.log("moved left");
+            moveElement(card, 0);
         }
         return;
     }
     for (const card of selectedCards) {
-        moveElement(card, 55);
-        console.log("moved right");
+        moveElement(card, 75);
     }
     startGameButton.classList.add('green');
 
@@ -225,20 +228,21 @@ selectCards.addEventListener('click', () => {
         } else {
             selectedCardNumebr++;
             if (card === cards[0] && selectedCardNumebr === 1){
-                card.style.transform = 'translateY(13.60em)';
+                card.style.transform = 'translateY(14.60em)';
             }  else if (card === cards[1] && selectedCardNumebr === 1){
-                card.style.transform = 'translateY(13.60em) translateX(-23em)';
+                card.style.transform = 'translateY(14.60em) translateX(-23em)';
             } else if (card === cards[1] && selectedCardNumebr === 2){
-                card.style.transform = 'translateY(13.60em)';
+                card.style.transform = 'translateY(14.60em)';
             } else if (card === cards[2] && selectedCardNumebr === 2){
                 card.style.transform = 'translateX(23em)';
             }else if (card === cards[3] && selectedCardNumebr === 1){
                 card.style.transform = 'translateX(-23em)';
             } else if (card === cards[4]){
-                card.style.transform = 'translateY(-13.60em) translateX(23em)';
+                card.style.transform = 'translateY(-14.60em) translateX(11.5em)';
             }
     }
         cardListenersActive = false;
+        cardsSelected = true;
         console.log("event removed")
     });
     });
