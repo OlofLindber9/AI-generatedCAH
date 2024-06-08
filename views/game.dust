@@ -28,39 +28,39 @@
 
       <ul class="hand">
         <li>
-            <a class="card" href="#">
+            <a class="card" data-rotation="-132" data-HorizontalPosition="29" data-verticalPosition="28">
             </a>
         </li>
         <li>
-            <a class="card" href="#">
+            <a class="card" data-rotation="-123" data-HorizontalPosition="32" data-verticalPosition="24">
             </a>
         </li>
         <li>
-            <a class="card" href="#">
+            <a class="card" data-rotation="-114" data-HorizontalPosition="37.5" data-verticalPosition="17">
             </a>
         </li>
         <li>
-            <a class="card" href="#">
+            <a class="card" data-rotation="-105" data-HorizontalPosition="37.9" data-verticalPosition="13">
             </a>
         </li>
         <li>
-            <a class="card" href="#">
+            <a class="card" data-rotation="-96" data-HorizontalPosition="40.6" data-verticalPosition="5">
             </a>
         </li>
         <li>
-            <a class="card" href="#">
+            <a class="card" data-rotation="-87" data-HorizontalPosition="40" data-verticalPosition="0">
             </a>
         </li>
         <li>
-            <a class="card" href="#">
+            <a class="card" data-rotation="-78" data-HorizontalPosition="40" data-verticalPosition="-6">
             </a>
         </li>
         <li>
-            <a class="card" href="#">
+            <a class="card" data-rotation="-69" data-HorizontalPosition="37.9" data-verticalPosition="-13">
             </a>
         </li>
         <li>
-            <a class="card" href="#">
+            <a class="card" data-rotation="-60" data-HorizontalPosition="35" data-verticalPosition="-17">
             </a>
         </li>
 

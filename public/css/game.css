@@ -21,9 +21,8 @@
     border: 2px solid rgba(222, 222, 233, 1);
   }
 
-.card.selected {
-    background: linear-gradient(135deg, #274426, #7e2a73);
-transform: translateY(80px);
+.card.selected{
+background: linear-gradient(135deg, #274426, #7e2a73);
 }
 
 
