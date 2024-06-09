@@ -1,8 +1,11 @@
 const cardPhrases = [];
+const cardRotations = [-87, -78, -96, -69, -105, -60, -114, -123, -132];
+const cardHorizontalPositions = [40, 40, 40.6, 37.9, 37.9, 35, 37.5, 32, 29];
+const cardVerticalPositions = [0, -6, 5, -13, 13, -17, 17, 24, 28];
 
-document.addEventListener('DOMContentLoaded', function () {
+document.addEventListener('DOMContentLoaded', async function () {
 
-    makeCards();
+    await makeCards();
     const cards = document.querySelectorAll('.hand .card');
 
     cards.forEach(card => {
@@ -39,17 +42,24 @@ document.addEventListener('DOMContentLoaded', function () {
     });
 
     async function makeCards(){
-        const cards = document.querySelectorAll('.hand .card');
+        const hand = document.getElementById('hand');
         const playerCards = await getplayerCards(sessionStorage.getItem('playerID'));
-        
+        let index = 0;
+
         for (const cardId of playerCards) {
+            const listItem = document.createElement('li');
+            const card = document.createElement('a');
+            card.className ='card';
+            card.setAttribute('data-rotation', cardRotations[index]);
+            card.setAttribute('data-HorizontalPosition', cardHorizontalPositions[index]);
+            card.setAttribute('data-verticalPosition', cardVerticalPositions[index]);
+
             const phrase = await getCardText(cardId);
             console.log(phrase);
             cardPhrases.push(phrase);
-        }
 
 
-        cards.forEach(card => {
+
             const border = document.createElement('div');
             border.classList.add('border');
             card.appendChild(border);
@@ -58,7 +68,10 @@ document.addEventListener('DOMContentLoaded', function () {
             card.appendChild(filter);
             const text = document.createElement('p');
             text.classList.add('pinv');
-            text.textContent = phrase;
+            if (!cardPhrases[index]) {
+                cardPhrases[index] = "No text found";
+            }
+            text.textContent = cardPhrases[index];
             card.appendChild(text);
             const shadow = document.createElement('div');
             shadow.classList.add('shadow');
@@ -66,7 +79,11 @@ document.addEventListener('DOMContentLoaded', function () {
             const backdrop = document.createElement('div');
             backdrop.classList.add('backdrop');
             card.appendChild(backdrop);
-        });
+            index++;
+
+            listItem.appendChild(card);
+            hand.appendChild(listItem);
+        }
     }
 
     async function getplayerCards(playerId) {
