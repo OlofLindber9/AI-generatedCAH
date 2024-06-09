@@ -37,9 +37,19 @@ html, body {
     border: 2px solid rgba(222, 222, 233, 0);
     left: 0px;
   }
-
-.card:hover {
-    border: 2px solid rgba(222, 222, 233, 1);
+  
+  .card:hover {
+    height: 155px;
+    width: 305px;
+    background: radial-gradient(50% 90% at top, var(--radial-center), var(--radial-edge)), linear-gradient(135deg, var(--card-grd1), var(--card-grd2));
+    z-index: 3;
+    transition: all ease 0.3s;
+  }
+  
+  .card:hover > .shadow {
+    box-shadow: 0px 4px 20px 5px rgba(255, 255, 255, 0.4);
+    z-index: 1;
+    transition: all ease 0.3s;
   }
 
 .card.selected{
@@ -130,52 +140,61 @@ ul.hand li:nth-child(1) {
     -webkit-transform: rotate(-87deg);
     -o-transform: rotate(-87deg);
     transform: rotate(-87deg);
+    z-index: 10;
 }
 ul.hand li:nth-child(2) {
     -moz-transform: rotate(-78deg);
     -webkit-transform: rotate(-78deg);
     -o-transform: rotate(-78deg);
     transform: rotate(-78deg);
+    z-index: 11;
 }
 ul.hand li:nth-child(3) {
     -moz-transform: rotate(-96deg);
     -webkit-transform: rotate(-96deg);
     -o-transform: rotate(-96deg);
     transform: rotate(-96deg);
+    z-index: 9;
 }
 ul.hand li:nth-child(4) {
     -moz-transform: rotate(-69deg);
     -webkit-transform: rotate(-69deg);
     -o-transform: rotate(-69deg);
     transform: rotate(-69deg);
+    z-index: 12;
 }
 ul.hand li:nth-child(5) {
     -moz-transform: rotate(-105deg);
     -webkit-transform: rotate(-105deg);
     -o-transform: rotate(-105deg);
     transform: rotate(-105deg);
+    z-index: 8;
 }
 ul.hand li:nth-child(6) {
     -moz-transform: rotate(-60deg);
     -webkit-transform: rotate(-60deg);
     -o-transform: rotate(-60deg);
     transform: rotate(-60deg);
+    z-index: 13;
 }
 ul.hand li:nth-child(7) {
     -moz-transform: rotate(-114deg);
     -webkit-transform: rotate(-114deg);
     -o-transform: rotate(-114deg);
     transform: rotate(-114deg);
+    z-index: 7;
 }
 ul.hand li:nth-child(8) {
     -moz-transform: rotate(-123deg);
     -webkit-transform: rotate(-123deg);
     -o-transform: rotate(-123deg);
     transform: rotate(-123deg);
+    z-index: 6;
 }
 ul.hand li:nth-child(9) {
     -moz-transform: rotate(-132deg);
     -webkit-transform: rotate(-132deg);
     -o-transform: rotate(-132deg);
     transform: rotate(-132deg);
+    z-index: 5;
 }

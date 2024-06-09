@@ -12,27 +12,39 @@ const amountSelectedCards = document.getElementById('amountSelected');
 
 
 const gameStartSocket = io();
-gameStartSocket.on('connect', function() {
+gameStartSocket.on('connect', async function() {
     console.log('Connected to game start namespace');
+    if (sessionStorage.getItem('isHost')){
+        gameStartSocket.emit('createRoom', sessionStorage.getItem('roomId'), sessionStorage.getItem('name'));
+    }else{
+        gameStartSocket.emit('joinRoom', sessionStorage.getItem('roomId'), sessionStorage.getItem('name'));
+    }
 });
 
 gameStartSocket.on('error', (error) => {
     console.error('Connection Error:', error);
 });
 
-function joinRoom() {
-    const roomId = document.getElementById('room-id').value;
-    gameStartSocket.emit('joinRoom', roomId);
-}
-
 gameStartSocket.on('message', function(msg) {
     console.log(msg);
     // Display this message on your web page
 });
 
+function joinRoom(roomId, playerName) {
+    gameStartSocket.emit('joinRoom', roomId, playerName);
+}
+
 gameStartSocket.on('gameEvent', function(data) {
     console.log(data);
     // Handle game events here
+});
+
+gameStartSocket.on('checkIfAllIsReady', async function() {
+    let statuses = await getplayersStatus(sessionStorage.getItem('lobbyID'))
+    let allCompleted = statuses.every(status => status === "GENERATING CARDS COMPLETED");
+    if (allCompleted) {
+        window.location.href = '/game';
+    }
 });
 
 function sendGameEvent(eventData) {
@@ -183,21 +195,13 @@ startGameButton.addEventListener('click', async () => {
         showPopup('You must select 2 cards');
         return;
     }
+    startGameButton.style.pointerEvents = 'none';
     const playerID = sessionStorage.getItem('playerID');
     const selectedPhrases = selectedCards.map(card => card.textContent);
     console.log(playerID);
 
     if (selectedCards.length !== 2) {
         showPopup('You must select 2 cards');
-        return;
-    }
-
-    if (startGameButton.classList.contains('green')) {
-        startGameButton.classList.remove('green');
-        updatePlayer(playerID, 'status', 'GENERATING CARDS')
-        for (const card of selectedCards) {
-            moveElement(card, 0);
-        }
         return;
     }
     for (const card of selectedCards) {
@@ -208,15 +212,14 @@ startGameButton.addEventListener('click', async () => {
     for (const phrase of selectedPhrases) {
         try {
             const createCardResponse = await createCard(phrase, playerID);
-            console.log(createCardResponse);
-            console.log(createCardResponse.id);
             const addCardToPlayerResponse = await addCardToPlayer(playerID, createCardResponse.id);
             console.log(addCardToPlayerResponse);
         } catch (error) {
             console.error('Error:', error);
         }
     }
-    updatePlayer(playerID, 'status', 'GENERATING CARDS COMPLETED')
+    await updatePlayer(playerID, 'status', 'GENERATING CARDS COMPLETED')
+    gameStartSocket.emit('playerGeneratedCardsDone', { roomId: sessionStorage.getItem('roomId') });
 });
 
 selectCards.addEventListener('click', () => {
@@ -300,6 +303,37 @@ async function updatePlayer(playerId, field, value) {
         return data;
     } catch (error) {
         console.error('Error updating player:', error);
+        throw error;
+    }
+}
+
+async function getplayersStatus(lobbyId) {
+    try {
+        // Append the playerId as a query parameter in the URL
+        const url = new URL('/getPlayersFromLobby', window.location.origin);
+        url.searchParams.append('lobbyId', lobbyId);
+        console.log(lobbyId)
+
+        const response = await fetch(url, {
+            method: 'GET', // GET request
+            headers: {
+                'Accept': 'application/json' // Accept header for expecting JSON data
+            }
+        });
+
+        if (!response.ok) {
+            throw new Error(`HTTP error! status: ${response.status}`);
+        }
+
+        const statuses = [];
+        const data = await response.json();
+        data.players.forEach(player => {
+            statuses.push(player.playerData.status);
+        });
+        return statuses;  // Return the data received from the server
+    }
+    catch (error) {
+        console.error('Error getting player:', error);
         throw error;
     }
 }
