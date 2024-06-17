@@ -3,12 +3,21 @@ const cards = [];
 let cardListenersActive = true;
 let cardsSelected = false;
 let cardsGenerated = false;
+let playerCantGenerateCards = false;
 const selectedCards = []; // Global array to keep track of selected cards
 const submitButton = document.getElementById("submitTheme");
 const startGameButton = document.getElementById('startGame');
 const selectCards = document.getElementById('selectCards');
 selectCards.classList.add("disabled");
 const amountSelectedCards = document.getElementById('amountSelected');
+const amountOfCards = await getPlayerAmountOfCards(sessionStorage.getItem('playerID'));
+
+if (amountOfCards >= 8) {
+    cardListenersActive = false;
+    cardsSelected = true;
+    playerCantGenerateCards = true;
+    showPopup('You have reached the maximum amount of cards. Press ready to start the game.');
+}
 
 
 const gameStartSocket = io();
@@ -191,6 +200,15 @@ function moveElement(element, translateXEm) {
 }
 
 startGameButton.addEventListener('click', async () => {
+
+    if (playerCantGenerateCards) {
+        startGameButton.style.pointerEvents = 'none';
+        const playerID = sessionStorage.getItem('playerID');
+        startGameButton.classList.add('green');
+        await updatePlayer(playerID, 'status', 'GENERATING CARDS COMPLETED')
+        gameStartSocket.emit('playerGeneratedCardsDone', { roomId: sessionStorage.getItem('roomId') });
+        return;
+    }
     if (!cardsSelected) {
         showPopup('You must select 2 cards');
         return;
@@ -223,6 +241,7 @@ startGameButton.addEventListener('click', async () => {
 });
 
 selectCards.addEventListener('click', () => {
+
     var selectedCardNumebr = 0;
     cards.forEach(card => {
         if (card !== selectedCards[0] && card !== selectedCards[1]) {
@@ -284,6 +303,30 @@ async function addCardToPlayer(playerID, cardID) {
         return data;  // Return the data received from the server
     } catch (error) {
         console.error('Error creating player:', error);
+        throw error;
+    }
+}
+
+async function getPlayerAmountOfCards(playerID) {
+    try {
+        const url = new URL('/getPlayerAmountOfCards', window.location.origin);
+        url.searchParams.append('playerId', playerID);
+
+        const response = await fetch(url, {
+            method: 'GET', // GET request
+            headers: {
+                'Accept': 'application/json' // Accept header for expecting JSON data
+            }
+        });
+
+        if (!response.ok) {
+            throw new Error(`HTTP error! status: ${response.status}`);
+        }
+        const data = await response.json();
+        return data.numberOfCards;  // Return the data received from the server
+    }
+    catch (error) {
+        console.error('Error getting player:', error);
         throw error;
     }
 }
