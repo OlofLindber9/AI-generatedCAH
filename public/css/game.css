@@ -10,14 +10,22 @@
     --card-grd2: #424242;
     --border-grd1: #b3b3b3;
     --border-grd2: #4e4e4e;
+    --darkCard-grd1: #3b3b3b;
+    --darkCard-grd2: #000000;
+    --darkCardborder-grd1: #bdbdbd;
+    --darkCardborder-grd2: #3d3d3d;
     --radial-center: rgba(219, 219, 219, 0.3);
     --radial-edge: rgba(119, 119, 119, 0.3);
+    --darkCardradial-center: rgba(114, 114, 114, 0.3);
+    --darkCardradial-edge: rgba(32, 32, 32, 0.3);
     --shadow: rgba(39, 39, 39, 0.5);
+    --darkCardShadow: rgba(3, 3, 3, 0.5);
 }
 
 html, body {
     overflow: hidden;
 }
+
 
 .card {
     width: 300px;
@@ -114,6 +122,83 @@ html, body {
     transition: all ease 0.3s;
   }
 
+  .darkCard {
+    width: 300px;
+    height: 150px;
+    position: relative;
+    background: linear-gradient(135deg, var(--darkCard-grd1), var(--darkCard-grd2));
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+    margin: 10px;
+    padding: 20px;
+    font-size: 16px;
+    text-align: center;
+    display: inline-block;
+    opacity: 1;
+    transform: translateX(100%);
+    transition: opacity 0.5s ease-out, transform 0.5s ease-out, left 0.5s ease-out, right 0.5s ease-out;
+    border: 2px solid rgba(222, 222, 233, 0);
+    right: 200px;
+    bottom: 300px;
+  }
+
+.darkCardBorder, .darkCardFilter, .darkCardShadow, .darkCardBackdrop {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+}
+
+.darkCardBorder {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    z-index: 1;
+    border-radius: 10px;
+    border: 1px solid transparent;
+    background: linear-gradient(135deg,var(--darkCardborder-grd1),var(--darkCardborder-grd2)) border-box;
+    -webkit-mask:
+       linear-gradient(#fff 0 0) padding-box, 
+       linear-gradient(#fff 0 0);
+    -webkit-mask-composite: xor;
+            mask-composite: exclude;
+  }
+  
+  .darkCardFilter {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    z-index: 2;
+    background: #000;
+    filter: url(#noiseFilter);
+    opacity: 16%;
+    mix-blend-mode: hard-light;
+    transition: all ease 0.3s;
+    border-radius: 10px;
+  }
+  
+  .darkCardBackdrop {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    background: radial-gradient(circle at top, var(--darkCardradial-center), var(--darkCardradial-edge)), linear-gradient(135deg, var(--darkCard-grd1), var(--darkCard-grd2));
+    z-index: 0;
+    border-radius: 10px;
+    opacity: 30%;
+    transition: all ease 0.3s;
+  }
+  
+  .darkCardShadow {
+    position: absolute;
+    height: 100%;
+    width: 100%;
+    border-radius: 10px;
+    z-index: 1;
+    box-shadow: 0px 0px 0px 0px rgba(0, 0, 0, 0.295);
+    transition: all ease 0.3s;
+  }
+
   .button.disabled {
     background-color: #ada8a8;
     pointer-events: none;
@@ -158,7 +243,7 @@ ul.hand{
     position: relative;
     clear: both;
     margin-bottom: 3.5em;
-    left: 10em;
+    left: 20em;
     height: 18em;
 }
 

@@ -6,10 +6,14 @@ const playCardButton = document.getElementById('playCard');
 let cardsSelected = false;
 
 document.addEventListener('DOMContentLoaded', async function () {
-
     await makeCards();
     const cards = document.querySelectorAll('.hand .card');
-
+    const darkCard = document.getElementById('darkCard');
+    const pinvElement = darkCard.querySelector('.pinv');
+    if (pinvElement) {
+        pinvElement.textContent = "The dark card"
+        pinvElement.style.color = 'white';
+    }
     cards.forEach(card => {
       card.addEventListener('click', function() {
 

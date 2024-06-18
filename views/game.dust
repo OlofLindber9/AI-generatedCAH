@@ -19,6 +19,13 @@
         <div class="input-area">
           <a class="button" id="playCard"><span>play card</span></a>
         </div>
+        <div class="darkCard" id="darkCard">
+          <div class="darkCardBorder"></div>
+          <div class="darkCardFilter"></div>
+          <p class="pinv"></p>
+          <div class="darkCardShadow"></div>
+          <div class="darkCardBackdrop"></div>
+      </div>
         <div class="blob-cont">
           <div class="first blob"></div>
           <div class="second blob"></div>
