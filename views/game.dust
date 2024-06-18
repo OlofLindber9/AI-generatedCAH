@@ -16,14 +16,15 @@
     </div>
       
       <div class="hero">
-        <div class="hero-text">
-          <h1>GAME</h1>
+        <div class="input-area">
+          <a class="button" id="playCard"><span>play card</span></a>
         </div>
         <div class="blob-cont">
           <div class="first blob"></div>
           <div class="second blob"></div>
           <div class="third blob"></div>
         </div>
+        <div id="popup" class="popup"></div>
       </div>
 
       <ul class="hand" id="hand">

@@ -52,7 +52,8 @@ gameStartSocket.on('checkIfAllIsReady', async function() {
     let statuses = await getplayersStatus(sessionStorage.getItem('lobbyID'))
     let allCompleted = statuses.every(status => status === "GENERATING CARDS COMPLETED");
     if (allCompleted) {
-        window.location.href = '/game';
+        const temp = await changeGameState(sessionStorage.getItem('lobbyID'),'gameDetails.gameState', 'GAME RUNNING');
+        window.location.href = '/game'; 
     }
 });
 
@@ -377,6 +378,24 @@ async function getplayersStatus(lobbyId) {
     }
     catch (error) {
         console.error('Error getting player:', error);
+        throw error;
+    }
+}
+
+async function changeGameState(lobbyId, field, state) {
+    try {
+        const response = await fetch('/changeGameState', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({ lobbyId, field, state })
+        });
+
+        const data = await response.json();
+        return data;
+    } catch (error) {
+        console.error('Error updating player:', error);
         throw error;
     }
 }

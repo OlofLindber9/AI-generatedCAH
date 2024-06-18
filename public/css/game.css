@@ -114,6 +114,43 @@ html, body {
     transition: all ease 0.3s;
   }
 
+  .button.disabled {
+    background-color: #ada8a8;
+    pointer-events: none;
+    color: #666;
+}
+
+  .button {
+    background-color: #ada8a8;
+    color: #000000;
+  }
+
+  .button:hover {
+    background-color: #6b6868;
+    color: #000000;
+  }
+
+  .button.green {
+    background-color: #7db16d;
+    color: #000000;
+  }
+
+  @keyframes spinFadeOut {
+    from {
+      transform: rotate(0deg);
+      opacity: 1;
+    }
+    to {
+      transform: rotate(1080deg);
+      opacity: 0;
+      height: 55px;
+      width: 105px;
+    }
+  }
+  
+  .spin-fade-out {
+    animation: spinFadeOut 2s forwards;
+  }
 ul.hand{
     list-style-type: none;
     padding: 0;

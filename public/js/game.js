@@ -2,6 +2,8 @@ const cardPhrases = [];
 const cardRotations = [-87, -78, -96, -69, -105, -60, -114, -123, -132];
 const cardHorizontalPositions = [40, 40, 40.6, 37.9, 37.9, 35, 37.5, 32, 29];
 const cardVerticalPositions = [0, -6, 5, -13, 13, -17, 17, 24, 28];
+const playCardButton = document.getElementById('playCard');
+let cardsSelected = false;
 
 document.addEventListener('DOMContentLoaded', async function () {
 
@@ -18,6 +20,7 @@ document.addEventListener('DOMContentLoaded', async function () {
         this.style.transform = ''; // Reset transform
         this.style.left = ``;
         this.style.top = ``;
+        cardsSelected = false;
         } else {
         // Clear previously selected cards
         cards.forEach(c => {
@@ -28,6 +31,7 @@ document.addEventListener('DOMContentLoaded', async function () {
         });
 
         this.classList.add('selected');
+        cardsSelected = true;
           // Apply the negative of the stored rotation
           const initialRotation = parseInt(this.getAttribute('data-rotation'), 10);
           const xPos = parseInt(this.getAttribute('data-HorizontalPosition'), 10);
@@ -39,6 +43,23 @@ document.addEventListener('DOMContentLoaded', async function () {
     }
 
       });
+    });
+
+    playCardButton.addEventListener('click', async function() {
+        if (this.classList.contains('green')) {
+            showPopup('You have already played a card');
+            return;
+        }
+        if(!cardsSelected){
+            showPopup("Please select a card to play");
+            return;
+        }
+        const card = document.querySelector('.selected');
+        const cardID = card.getAttribute('data-cardId');
+        const response = await addCardToPlayedCards(sessionStorage.getItem('lobbyID', card), cardID);
+        this.classList.add('green');
+        this.children[0].textContent = 'card played';
+        spinAway(card);
     });
 
     async function makeCards(){
@@ -53,6 +74,7 @@ document.addEventListener('DOMContentLoaded', async function () {
             card.setAttribute('data-rotation', cardRotations[index]);
             card.setAttribute('data-HorizontalPosition', cardHorizontalPositions[index]);
             card.setAttribute('data-verticalPosition', cardVerticalPositions[index]);
+            card.setAttribute('data-cardId', cardId);
 
             const phrase = await getCardText(cardId);
             console.log(phrase);
@@ -139,4 +161,44 @@ document.addEventListener('DOMContentLoaded', async function () {
     }
     });
 
-  
+    async function addCardToPlayedCards(lobbyId, cardId) {
+        try {
+            const url = new URL('/addCardToPlayedCards', window.location.origin);
+            const data = {
+                lobbyId: lobbyId,
+                cardId: cardId
+            };
+    
+            const response = await fetch(url, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(data)
+            });
+    
+            if (!response.ok) {
+                throw new Error(`HTTP error! status: ${response.status}`);
+            }
+    
+            return response.json();
+        }
+        catch (error) {
+            console.error('Error adding card to played cards:', error);
+            throw error;
+        }
+    }
+
+    function showPopup(text) {
+        var popup = document.getElementById('popup');
+        popup.textContent = text;
+        popup.style.display = 'block';
+    
+        setTimeout(function() {
+            popup.style.display = 'none';
+        }, 3000);
+    }
+
+    function spinAway(element) {
+        element.classList.add('spin-fade-out');
+    }
