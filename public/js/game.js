@@ -3,15 +3,17 @@ const cardRotations = [-87, -78, -96, -69, -105, -60, -114, -123, -132];
 const cardHorizontalPositions = [40, 40, 40.6, 37.9, 37.9, 35, 37.5, 32, 29];
 const cardVerticalPositions = [0, -6, 5, -13, 13, -17, 17, 24, 28];
 const playCardButton = document.getElementById('playCard');
-let cardsSelected = false;
+let cardsSelected = false;          
+
 
 document.addEventListener('DOMContentLoaded', async function () {
+    const darkCardTexts =  await getDarkCardTexts(sessionStorage.getItem('lobbyID'));
     await makeCards();
     const cards = document.querySelectorAll('.hand .card');
     const darkCard = document.getElementById('darkCard');
     const pinvElement = darkCard.querySelector('.pinv');
     if (pinvElement) {
-        pinvElement.textContent = "The dark card"
+        pinvElement.textContent = darkCardTexts[0];
         pinvElement.style.color = 'white';
     }
     cards.forEach(card => {
@@ -164,6 +166,31 @@ document.addEventListener('DOMContentLoaded', async function () {
         }
     }
     });
+
+    async function getDarkCardTexts(lobbyId) {
+        try {
+            const url = new URL('/darkCardTexts', window.location.origin);
+            url.searchParams.append('lobbyId', lobbyId);
+
+            const response = await fetch(url, {
+                method: 'GET',
+                headers: {
+                    'Accept': 'application/json'
+                },
+            });
+
+            if (!response.ok) {
+                throw new Error(`HTTP error! status: ${response.status}`);
+            }
+
+            const res = await response.json();
+            return res.darkCardTexts;
+        }
+        catch (error) {
+            console.error('Error getting dark card texts:', error);
+            throw error;
+        }
+    }
 
     async function addCardToPlayedCards(lobbyId, cardId) {
         try {
