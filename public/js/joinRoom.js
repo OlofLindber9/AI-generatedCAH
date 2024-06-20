@@ -124,7 +124,7 @@ submitButton.addEventListener("click", async function() {
                     sessionStorage.setItem('playerID', playerId);
                     addPlayerToLobby(lobbyId, playerId).then(data => {
                         sessionStorage.setItem('lobbyID', lobbyId);
-                        joinRoomSocket.emit('joinRoom', roomId, name);
+                        joinRoomSocket.emit('joinRoom', roomId, name, true);
                     }).catch(error => {
                         console.error('Error adding player to lobby:', error);
                     });

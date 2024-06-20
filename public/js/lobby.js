@@ -18,9 +18,10 @@ lobbySocket.on('connect', function() {
     console.log('Connected to lobby namespace');
     console.log(sessionStorage.getItem('roomId'));
     if (sessionStorage.getItem('isHost')){
-        lobbySocket.emit('createRoom', sessionStorage.getItem('roomId'), sessionStorage.getItem('name'));
+        //lobbySocket.emit('createRoom', sessionStorage.getItem('roomId'), sessionStorage.getItem('name'));
+        lobbySocket.emit('initPlayerList', sessionStorage.getItem('roomId'))
     }else{
-        lobbySocket.emit('joinRoom', sessionStorage.getItem('roomId'), sessionStorage.getItem('name'));
+        lobbySocket.emit('joinRoom', sessionStorage.getItem('roomId'), sessionStorage.getItem('name'), false);
     }
 
     const roomIdDisplayElement = document.getElementById('room-id-display');
