@@ -10,7 +10,9 @@ const startGameButton = document.getElementById('startGame');
 const selectCards = document.getElementById('selectCards');
 selectCards.classList.add("disabled");
 const amountSelectedCards = document.getElementById('amountSelected');
+console.log('we are here 1');
 const amountOfCards = await getPlayerAmountOfCards(sessionStorage.getItem('playerID'));
+console.log('we are here 2');
 
 if (amountOfCards >= 8) {
     cardListenersActive = false;
@@ -269,9 +271,6 @@ selectCards.addEventListener('click', () => {
         console.log("event removed")
     });
     });
-
-
-
 async function createCard(text, creator) {
     try {
         const response = await fetch('/createCard', {
