@@ -45,7 +45,7 @@ createRoomLink.addEventListener('click', (e) => {
         .then(data => {
             const playerID = data.playerID;
             sessionStorage.setItem('playerID', playerID);
-            createLobby(roomId, [playerID], { gameState: "AWAITING START" })
+            createLobby(roomId, [playerID], { gameState: "AWAITING START", round: 1 })
             .then(data => {
                 const lobbyID = data.id;
                 sessionStorage.setItem('lobbyID', lobbyID);

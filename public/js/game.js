@@ -3,10 +3,14 @@ const cardRotations = [-87, -78, -96, -69, -105, -60, -114, -123, -132];
 const cardHorizontalPositions = [40, 40, 40.6, 37.9, 37.9, 35, 37.5, 32, 29];
 const cardVerticalPositions = [0, -6, 5, -13, 13, -17, 17, 24, 28];
 const playCardButton = document.getElementById('playCard');
-let cardsSelected = false;          
+let cardsSelected = false;  
+const roundNumber = await getRoundNumber(sessionStorage.getItem('lobbyID'));
+console.log(roundNumber);
+await makeCzar(roundNumber, sessionStorage.getItem('lobbyID'));    
 
 
-document.addEventListener('DOMContentLoaded', async function () {
+
+//document.addEventListener('DOMContentLoaded', async function () {
     const darkCardTexts =  await getDarkCardTexts(sessionStorage.getItem('lobbyID'));
     await makeCards();
     const cards = document.querySelectorAll('.hand .card');
@@ -165,7 +169,7 @@ document.addEventListener('DOMContentLoaded', async function () {
             throw error;
         }
     }
-    });
+  //  });
 
     async function getDarkCardTexts(lobbyId) {
         try {
@@ -216,6 +220,57 @@ document.addEventListener('DOMContentLoaded', async function () {
         }
         catch (error) {
             console.error('Error adding card to played cards:', error);
+            throw error;
+        }
+    }
+
+    async function getRoundNumber(lobbyId) {
+        try {
+            const url = new URL('/getRoundNumber', window.location.origin);
+            url.searchParams.append('lobbyId', lobbyId);
+
+            const response = await fetch(url, {
+                method: 'GET',
+                headers: {
+                    'Accept': 'application/json'
+                },
+            });
+
+            if (!response.ok) {
+                throw new Error(`HTTP error! status: ${response.status}`);
+            }
+
+            const res = await response.json();
+            return res.roundNumber;
+        }
+        catch (error) {
+            console.error('Error getting round number:', error);
+            throw error;
+        }
+    }
+
+    async function makeCzar(roundNumber, lobbyId) {
+        try {
+            const url = new URL('/makeCzar', window.location.origin);
+            const data = {
+                roundNumber: roundNumber,
+                lobbyId: lobbyId
+            };
+            const response = await fetch(url, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(data)
+            });
+            if (!response.ok) {
+                throw new Error(`HTTP error! status: ${response.status}`);
+            }
+    
+            return response.json();
+        }
+        catch (error) {
+            console.error('Error making Czar:', error);
             throw error;
         }
     }
