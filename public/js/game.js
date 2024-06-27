@@ -6,20 +6,32 @@ const playCardButton = document.getElementById('playCard');
 let cardsSelected = false;  
 const roundNumber = await getRoundNumber(sessionStorage.getItem('lobbyID'));
 console.log(roundNumber);
-await makeCzar(roundNumber, sessionStorage.getItem('lobbyID'));    
+await makeCzar(roundNumber, sessionStorage.getItem('lobbyID'));  
+const isCzar = await getIfCzar(sessionStorage.getItem('playerID')); 
+const CzarMessage = document.getElementById('CzarMessage'); 
 
 
 
 //document.addEventListener('DOMContentLoaded', async function () {
     const darkCardTexts =  await getDarkCardTexts(sessionStorage.getItem('lobbyID'));
-    await makeCards();
-    const cards = document.querySelectorAll('.hand .card');
+    if(isCzar){
+        playCardButton.textContent = 'Choose card';
+        playCardButton.classList.add('disabled');
+    }
+    if(!isCzar){
+        CzarMessage.style.display = 'none';
+        await makeCards();
+        const cards = document.querySelectorAll('.hand .card');
+    }
+
     const darkCard = document.getElementById('darkCard');
     const pinvElement = darkCard.querySelector('.pinv');
     if (pinvElement) {
         pinvElement.textContent = darkCardTexts[0];
         pinvElement.style.color = 'white';
     }
+    
+    if(!isCzar){
     cards.forEach(card => {
       card.addEventListener('click', function() {
 
@@ -53,7 +65,7 @@ await makeCzar(roundNumber, sessionStorage.getItem('lobbyID'));
     }
 
       });
-    });
+    })};
 
     playCardButton.addEventListener('click', async function() {
         if (this.classList.contains('green')) {
@@ -169,7 +181,7 @@ await makeCzar(roundNumber, sessionStorage.getItem('lobbyID'));
             throw error;
         }
     }
-  //  });
+    //});
 
     async function getDarkCardTexts(lobbyId) {
         try {
@@ -271,6 +283,31 @@ await makeCzar(roundNumber, sessionStorage.getItem('lobbyID'));
         }
         catch (error) {
             console.error('Error making Czar:', error);
+            throw error;
+        }
+    }
+
+    async function getIfCzar(playerId) {
+        try {
+            const url = new URL('/getIfCzar', window.location.origin);
+            url.searchParams.append('playerId', playerId);
+
+            const response = await fetch(url, {
+                method: 'GET',
+                headers: {
+                    'Accept': 'application/json'
+                },
+            });
+
+            if (!response.ok) {
+                throw new Error(`HTTP error! status: ${response.status}`);
+            }
+
+            const res = await response.json();
+            return res.isCzar;
+        }
+        catch (error) {
+            console.error('Error getting if Czar:', error);
             throw error;
         }
     }

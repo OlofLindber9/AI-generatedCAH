@@ -8,6 +8,9 @@
 
     <div class="nav">
         <h2>AI-generatedCAH</h2>
+        <div class="centered-container">
+          <h2 class="Czar-message" id="CzarMessage">Waiting for players to play their card</h2>
+        </div>
         <div class="menu">
             <a href="/game-summary">
                 <p>End Game</p>

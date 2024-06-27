@@ -308,6 +308,7 @@ async function addCardToPlayer(playerID, cardID) {
 }
 
 async function getPlayerAmountOfCards(playerID) {
+    console.log("lalalalalalal");
     try {
         const url = new URL('/getPlayerAmountOfCards', window.location.origin);
         url.searchParams.append('playerId', playerID);
@@ -323,6 +324,7 @@ async function getPlayerAmountOfCards(playerID) {
             throw new Error(`HTTP error! status: ${response.status}`);
         }
         const data = await response.json();
+        console.log(data.numberOfCards);
         return data.numberOfCards;  // Return the data received from the server
     }
     catch (error) {
