@@ -8,18 +8,41 @@ const roundNumber = await getRoundNumber(sessionStorage.getItem('lobbyID'));
 console.log(roundNumber);
 await makeCzar(roundNumber, sessionStorage.getItem('lobbyID'));  
 const isCzar = await getIfCzar(sessionStorage.getItem('playerID')); 
-const CzarMessage = document.getElementById('CzarMessage'); 
+const CzarMessage = document.getElementById('CzarMessage');
 
 
+const gameSocket = io();
+gameSocket.on('connect', async function() {
+    console.log('Connected to game namespace');
+    if (sessionStorage.getItem('isHost')){
+        gameSocket.emit('createRoom', sessionStorage.getItem('roomId'), sessionStorage.getItem('name'));
+    }else{
+        gameSocket.emit('joinRoom', sessionStorage.getItem('roomId'), sessionStorage.getItem('name'));
+    }
+});
+
+gameSocket.on('checkIfAllHasPlayed', async function() {
+    console.log("checkIfAllHasPlayed");
+    let statuses = await getplayersStatus(sessionStorage.getItem('lobbyID'))
+    let allPlayed = statuses.every(status => status === "CARD PLAYED" || status === "CZAR");
+    console.log(allPlayed);
+    if (allPlayed) {
+        if(isCzar){
+                //________________________VISA DE SPELADE KORTEN_________________________
+                console.log("you are the Czar and All have played");
+        }
+    }
+});
 
 //document.addEventListener('DOMContentLoaded', async function () {
     const darkCardTexts =  await getDarkCardTexts(sessionStorage.getItem('lobbyID'));
     if(isCzar){
+        CzarMessage.style.display = 'block';
         playCardButton.textContent = 'Choose card';
         playCardButton.classList.add('disabled');
+        await updatePlayer(sessionStorage.getItem('playerID'), 'status', 'CZAR');
     }
     if(!isCzar){
-        CzarMessage.style.display = 'none';
         await makeCards();
         const cards = document.querySelectorAll('.hand .card');
     }
@@ -32,6 +55,7 @@ const CzarMessage = document.getElementById('CzarMessage');
     }
     
     if(!isCzar){
+    const cards = document.querySelectorAll('.hand .card');
     cards.forEach(card => {
       card.addEventListener('click', function() {
 
@@ -78,7 +102,8 @@ const CzarMessage = document.getElementById('CzarMessage');
         }
         const card = document.querySelector('.selected');
         const cardID = card.getAttribute('data-cardId');
-        const response = await addCardToPlayedCards(sessionStorage.getItem('lobbyID', card), cardID);
+        await updatePlayer(sessionStorage.getItem('playerID'), 'status', 'CARD PLAYED')
+        gameSocket.emit('cardPlayed', { roomId: sessionStorage.getItem('roomId') });
         this.classList.add('green');
         this.children[0].textContent = 'card played';
         spinAway(card);
@@ -308,6 +333,56 @@ const CzarMessage = document.getElementById('CzarMessage');
         }
         catch (error) {
             console.error('Error getting if Czar:', error);
+            throw error;
+        }
+    }
+
+    async function updatePlayer(playerId, field, value) {
+        try {
+            const response = await fetch('/updatePlayer', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({ playerId, field, value })
+            });
+    
+            const data = await response.json();
+            console.log(data.message);
+            return data;
+        } catch (error) {
+            console.error('Error updating player:', error);
+            throw error;
+        }
+    }
+
+    async function getplayersStatus(lobbyId) {
+        try {
+            // Append the playerId as a query parameter in the URL
+            const url = new URL('/getPlayersFromLobby', window.location.origin);
+            url.searchParams.append('lobbyId', lobbyId);
+            console.log(lobbyId)
+    
+            const response = await fetch(url, {
+                method: 'GET', // GET request
+                headers: {
+                    'Accept': 'application/json' // Accept header for expecting JSON data
+                }
+            });
+    
+            if (!response.ok) {
+                throw new Error(`HTTP error! status: ${response.status}`);
+            }
+    
+            const statuses = [];
+            const data = await response.json();
+            data.players.forEach(player => {
+                statuses.push(player.playerData.status);
+            });
+            return statuses;  // Return the data received from the server
+        }
+        catch (error) {
+            console.error('Error getting player:', error);
             throw error;
         }
     }

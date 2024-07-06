@@ -327,3 +327,7 @@ ul.hand li:nth-child(9) {
     transform: rotate(-132deg);
     z-index: 5;
 }
+
+.Czar-message {
+  display: none;
+}

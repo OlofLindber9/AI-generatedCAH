@@ -308,7 +308,6 @@ async function addCardToPlayer(playerID, cardID) {
 }
 
 async function getPlayerAmountOfCards(playerID) {
-    console.log("lalalalalalal");
     try {
         const url = new URL('/getPlayerAmountOfCards', window.location.origin);
         url.searchParams.append('playerId', playerID);
