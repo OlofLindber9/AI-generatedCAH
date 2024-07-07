@@ -1,4 +1,5 @@
 const cardPhrases = [];
+const PlayedCardPhrases = [];
 const cardRotations = [-87, -78, -96, -69, -105, -60, -114, -123, -132];
 const cardHorizontalPositions = [40, 40, 40.6, 37.9, 37.9, 35, 37.5, 32, 29];
 const cardVerticalPositions = [0, -6, 5, -13, 13, -17, 17, 24, 28];
@@ -28,8 +29,10 @@ gameSocket.on('checkIfAllHasPlayed', async function() {
     console.log(allPlayed);
     if (allPlayed) {
         if(isCzar){
+            const playedCards = await getPlayedCards(sessionStorage.getItem('lobbyID'));
+            await makePlayedCards(playedCards);
                 //________________________VISA DE SPELADE KORTEN_________________________
-                console.log("you are the Czar and All have played");
+                
         }
     }
 });
@@ -54,7 +57,6 @@ gameSocket.on('checkIfAllHasPlayed', async function() {
         pinvElement.style.color = 'white';
     }
     
-    if(!isCzar){
     const cards = document.querySelectorAll('.hand .card');
     cards.forEach(card => {
       card.addEventListener('click', function() {
@@ -89,7 +91,7 @@ gameSocket.on('checkIfAllHasPlayed', async function() {
     }
 
       });
-    })};
+    });
 
     playCardButton.addEventListener('click', async function() {
         if (this.classList.contains('green')) {
@@ -102,6 +104,7 @@ gameSocket.on('checkIfAllHasPlayed', async function() {
         }
         const card = document.querySelector('.selected');
         const cardID = card.getAttribute('data-cardId');
+        await addCardToPlayedCards(sessionStorage.getItem('lobbyID'), cardID);
         await updatePlayer(sessionStorage.getItem('playerID'), 'status', 'CARD PLAYED')
         gameSocket.emit('cardPlayed', { roomId: sessionStorage.getItem('roomId') });
         this.classList.add('green');
@@ -141,6 +144,50 @@ gameSocket.on('checkIfAllHasPlayed', async function() {
                 cardPhrases[index] = "No text found";
             }
             text.textContent = cardPhrases[index];
+            card.appendChild(text);
+            const shadow = document.createElement('div');
+            shadow.classList.add('shadow');
+            card.appendChild(shadow);
+            const backdrop = document.createElement('div');
+            backdrop.classList.add('backdrop');
+            card.appendChild(backdrop);
+            index++;
+
+            listItem.appendChild(card);
+            hand.appendChild(listItem);
+        }
+    }
+
+    async function makePlayedCards(playedCards){
+        const hand = document.getElementById('hand');
+        let index = 0;
+
+        for (const cardId of playedCards) {
+            const listItem = document.createElement('li');
+            const card = document.createElement('a');
+            card.className ='card';
+            card.setAttribute('data-rotation', cardRotations[index]);
+            card.setAttribute('data-HorizontalPosition', cardHorizontalPositions[index]);
+            card.setAttribute('data-verticalPosition', cardVerticalPositions[index]);
+            card.setAttribute('data-cardId', cardId);
+
+            const phrase = await getCardText(cardId);
+            PlayedCardPhrases.push(phrase);
+
+
+
+            const border = document.createElement('div');
+            border.classList.add('border');
+            card.appendChild(border);
+            const filter = document.createElement('div');
+            filter.classList.add('filter');
+            card.appendChild(filter);
+            const text = document.createElement('p');
+            text.classList.add('pinv');
+            if (!PlayedCardPhrases[index]) {
+                PlayedCardPhrases[index] = "No text found";
+            }
+            text.textContent = PlayedCardPhrases[index];
             card.appendChild(text);
             const shadow = document.createElement('div');
             shadow.classList.add('shadow');
@@ -233,6 +280,32 @@ gameSocket.on('checkIfAllHasPlayed', async function() {
         }
     }
 
+    async function getCardText(cardId) {
+        try {
+            const url = new URL('/getCardText', window.location.origin);
+            url.searchParams.append('cardId', cardId);
+
+            const response = await fetch(url, {
+                method: 'GET',
+                headers: {
+                    'Accept': 'application/json'
+                },
+            });
+
+            if (!response.ok) {
+                throw new Error(`HTTP error! status: ${response.status}`);
+            }
+
+            const res = await response.json();
+            return res.cardText;
+        }
+        catch (error) {
+            console.error('Error getting card text:', error);
+            throw error;
+        }
+    }
+
+
     async function addCardToPlayedCards(lobbyId, cardId) {
         try {
             const url = new URL('/addCardToPlayedCards', window.location.origin);
@@ -257,6 +330,29 @@ gameSocket.on('checkIfAllHasPlayed', async function() {
         }
         catch (error) {
             console.error('Error adding card to played cards:', error);
+            throw error;
+        }
+    }
+
+    async function getPlayedCards(lobbyId) {
+        try {
+            const url = new URL('/getPlayedCards', window.location.origin);
+            url.searchParams.append('lobbyId', lobbyId);
+            const response = await fetch(url, {
+                method: 'GET',
+                headers: {
+                    'Accept': 'application/json'
+                },
+            });
+
+            if (!response.ok) {
+                throw new Error(`HTTP error! status: ${response.status}`);
+            }
+            const res = await response.json();
+            return res.playedCards;
+        }
+        catch (error) {
+            console.error('Error getting played cards:', error);
             throw error;
         }
     }
