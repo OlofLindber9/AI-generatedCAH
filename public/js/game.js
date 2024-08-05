@@ -31,8 +31,8 @@ gameSocket.on('checkIfAllHasPlayed', async function() {
         if(isCzar){
             const playedCards = await getPlayedCards(sessionStorage.getItem('lobbyID'));
             await makePlayedCards(playedCards);
-                //________________________VISA DE SPELADE KORTEN_________________________
-                
+            playCardButton.classList.remove('disabled');
+            CzarMessage.textContent = 'Read the played cards outloud to your friends and choose the winning card';
         }
     }
 });
@@ -43,6 +43,23 @@ gameSocket.on('checkIfAllHasPlayed', async function() {
         CzarMessage.style.display = 'block';
         playCardButton.textContent = 'Choose card';
         playCardButton.classList.add('disabled');
+        playCardButton.addEventListener('click', async function() {
+            if (this.classList.contains('green')) {
+                showPopup('You have already chosen a winning card');
+                return;
+            }
+            if(!cardsSelected){
+                showPopup("Please select a winning card");
+                return;
+            }
+            const card = document.querySelector('.selected');
+            const cardID = card.getAttribute('data-cardId');
+            await giveWinningPlayerPoint(cardID);
+            await removeWinningCardFromPlayer(cardID);
+            this.classList.add('green');
+            playCardButton.textContent = 'card chosen';
+            spinAway(card);
+        });
         await updatePlayer(sessionStorage.getItem('playerID'), 'status', 'CZAR');
     }
     if(!isCzar){
@@ -93,24 +110,26 @@ gameSocket.on('checkIfAllHasPlayed', async function() {
       });
     });
 
-    playCardButton.addEventListener('click', async function() {
-        if (this.classList.contains('green')) {
-            showPopup('You have already played a card');
-            return;
-        }
-        if(!cardsSelected){
-            showPopup("Please select a card to play");
-            return;
-        }
-        const card = document.querySelector('.selected');
-        const cardID = card.getAttribute('data-cardId');
-        await addCardToPlayedCards(sessionStorage.getItem('lobbyID'), cardID);
-        await updatePlayer(sessionStorage.getItem('playerID'), 'status', 'CARD PLAYED')
-        gameSocket.emit('cardPlayed', { roomId: sessionStorage.getItem('roomId') });
-        this.classList.add('green');
-        this.children[0].textContent = 'card played';
-        spinAway(card);
-    });
+    if(!isCzar){
+        playCardButton.addEventListener('click', async function() {
+            if (this.classList.contains('green')) {
+                showPopup('You have already played a card');
+                return;
+            }
+            if(!cardsSelected){
+                showPopup("Please select a card to play");
+                return;
+            }
+            const card = document.querySelector('.selected');
+            const cardID = card.getAttribute('data-cardId');
+            await addCardToPlayedCards(sessionStorage.getItem('lobbyID'), cardID);
+            await updatePlayer(sessionStorage.getItem('playerID'), 'status', 'CARD PLAYED')
+            gameSocket.emit('cardPlayed', { roomId: sessionStorage.getItem('roomId') });
+            this.classList.add('green');
+            this.children[0].textContent = 'card played';
+            spinAway(card);
+        });
+    }
 
     async function makeCards(){
         const hand = document.getElementById('hand');
@@ -200,6 +219,42 @@ gameSocket.on('checkIfAllHasPlayed', async function() {
             listItem.appendChild(card);
             hand.appendChild(listItem);
         }
+
+        const cards = document.querySelectorAll('.hand .card');
+        cards.forEach(card => {
+          card.addEventListener('click', function() {
+    
+        // Toggle selection of the current card
+        if (this.classList.contains('selected')) {
+            this.classList.remove('selected');
+            console.log("selcted card clicked");
+            this.style.transform = ''; // Reset transform
+            this.style.left = ``;
+            this.style.top = ``;
+            cardsSelected = false;
+            } else {
+            // Clear previously selected cards
+            cards.forEach(c => {
+              c.classList.remove('selected');
+              c.style.transform = ''; // Reset transform
+              c.style.left = ``;
+              c.style.top = ``;
+            });
+    
+            this.classList.add('selected');
+            cardsSelected = true;
+              // Apply the negative of the stored rotation
+              const initialRotation = parseInt(this.getAttribute('data-rotation'), 10);
+              const xPos = parseInt(this.getAttribute('data-HorizontalPosition'), 10);
+              const yPos = parseInt(this.getAttribute('data-verticalPosition'), 10);
+              this.style.transform = `rotate(${0 - initialRotation}deg)`;
+              console.log(xPos);
+              this.style.left = `${xPos}em`;
+              this.style.top = `${yPos}em`;
+        }
+    
+          });
+        });
     }
 
     async function getplayerCards(playerId) {
@@ -228,7 +283,7 @@ gameSocket.on('checkIfAllHasPlayed', async function() {
         }
     }
 
-    async function getCardText(cardid) {
+    async function getCard(cardid) {
         try {
             // Append the playerId as a query parameter in the URL
             const url = new URL('/getCard', window.location.origin);
@@ -482,6 +537,56 @@ gameSocket.on('checkIfAllHasPlayed', async function() {
             throw error;
         }
     }
+
+    async function giveWinningPlayerPoint(cardId){
+        try {
+            const url = new URL('/giveWinningPlayerPoint', window.location.origin);
+            const data = {
+                cardId: cardId
+            };
+            const response = await fetch(url, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(data)
+            });
+            if (!response.ok) {
+                throw new Error(`HTTP error! status: ${response.status}`);
+            }
+    
+            return response.json();
+        }
+        catch (error) {
+            console.error('Error giving winning player point:', error);
+            throw error;
+        }
+    }
+
+async function removeWinningCardFromPlayer(cardId){
+    try {
+        const url = new URL('/removeWinningCardFromPlayer', window.location.origin);
+        const data = {
+            cardId: cardId
+        };
+        const response = await fetch(url, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(data)
+        });
+        if (!response.ok) {
+            throw new Error(`HTTP error! status: ${response.status}`);
+        }
+
+        return response.json();
+    }
+    catch (error) {
+        console.error('Error removing winning card from player:', error);
+        throw error;
+    }
+}
 
     function showPopup(text) {
         var popup = document.getElementById('popup');

@@ -2,8 +2,9 @@ const lobbySocket = io();
 const startGameButton = document.getElementById('start-game-button');
 
 //___________________________________________FIX STATUS IN LOBBY______READY/AWAITING START___________________________FOR BOTH PLAYERS AND LOBBY
-
-if (!sessionStorage.getItem('isHost')) {
+console.log(sessionStorage.getItem('isHost'));
+if (sessionStorage.getItem('isHost') === 'false') {
+    console.log('Disabling start game button');
     startGameButton.classList.add('disabled');
     startGameButton.removeAttribute('href'); // Disable link for non-hosts
 } else {

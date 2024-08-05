@@ -122,6 +122,7 @@ submitButton.addEventListener("click", async function() {
                 createPlayer(name, [], 0, false, false, lobbyId, "AWAITING START").then(data => {
                     const playerId = data.playerID;
                     sessionStorage.setItem('playerID', playerId);
+                    sessionStorage.setItem('isHost', false);
                     addPlayerToLobby(lobbyId, playerId).then(data => {
                         sessionStorage.setItem('lobbyID', lobbyId);
                         joinRoomSocket.emit('joinRoom', roomId, name, true);
