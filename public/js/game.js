@@ -23,10 +23,8 @@ gameSocket.on('connect', async function() {
 });
 
 gameSocket.on('checkIfAllHasPlayed', async function() {
-    console.log("checkIfAllHasPlayed");
     let statuses = await getplayersStatus(sessionStorage.getItem('lobbyID'))
     let allPlayed = statuses.every(status => status === "CARD PLAYED" || status === "CZAR");
-    console.log(allPlayed);
     if (allPlayed) {
         if(isCzar){
             const playedCards = await getPlayedCards(sessionStorage.getItem('lobbyID'));
@@ -36,6 +34,11 @@ gameSocket.on('checkIfAllHasPlayed', async function() {
         }
     }
 });
+
+gameSocket.on('showWinningPlayer', async function(winningPlayerName) {
+    showWinningPlayer(winningPlayerName);
+    }  
+);
 
 //document.addEventListener('DOMContentLoaded', async function () {
     const darkCardTexts =  await getDarkCardTexts(sessionStorage.getItem('lobbyID'));
@@ -57,6 +60,7 @@ gameSocket.on('checkIfAllHasPlayed', async function() {
             const winningPlayerID = await giveWinningPlayerPoint(cardID);
             const winningPlayerName = await getplayerName(winningPlayerID);
             await removeWinningCardFromPlayer(cardID);
+            gameSocket.emit('showWinningPlayer', { roomId: sessionStorage.getItem('roomId'), winningPlayerName: winningPlayerName });
             this.classList.add('green');
             playCardButton.textContent = 'card chosen';
             spinAway(card);
@@ -626,4 +630,30 @@ async function getplayerName(playerId) {
 
     function spinAway(element) {
         element.classList.add('spin-fade-out');
+    }
+
+    function showWinningPlayer(winningPlayerName) {
+        const modal = document.getElementById('modal');
+    const modalText = document.getElementById('modal-text');
+    const confettiContainer = document.getElementById('confetti');
+
+    // Set the modal text
+    modalText.textContent = `The winner of this round is ${winningPlayerName}!!`;
+
+    // Generate confetti
+    for (let i = 0; i < 50; i++) {
+        const confetti = document.createElement('span');
+        confetti.style.left = (Math.random() * 100) + '%';
+        confetti.style.animationDelay = (Math.random() * 2) + 's';
+        confettiContainer.appendChild(confetti);
+    }
+
+    // Show the modal
+    modal.style.display = 'block';
+
+    // Hide the modal after 7 seconds
+    setTimeout(() => {
+        modal.style.display = 'none';
+        confettiContainer.innerHTML = ''; // Clear confetti for next time
+    }, 7000);
     }

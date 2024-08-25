@@ -35,6 +35,13 @@
           <div class="third blob"></div>
         </div>
         <div id="popup" class="popup"></div>
+                              <!-- Modal -->
+                              <div id="modal" class="modal">
+                                <div class="modal-content">
+                                    <div id="confetti" class="confetti"></div>
+                                    <p id="modal-text">This is a modal message.</p>
+                                </div>
+                            </div>
       </div>
 
       <ul class="hand" id="hand">
