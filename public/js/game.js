@@ -54,7 +54,8 @@ gameSocket.on('checkIfAllHasPlayed', async function() {
             }
             const card = document.querySelector('.selected');
             const cardID = card.getAttribute('data-cardId');
-            await giveWinningPlayerPoint(cardID);
+            const winningPlayerID = await giveWinningPlayerPoint(cardID);
+            const winningPlayerName = await getplayerName(winningPlayerID);
             await removeWinningCardFromPlayer(cardID);
             this.classList.add('green');
             playCardButton.textContent = 'card chosen';
@@ -554,8 +555,8 @@ gameSocket.on('checkIfAllHasPlayed', async function() {
             if (!response.ok) {
                 throw new Error(`HTTP error! status: ${response.status}`);
             }
-    
-            return response.json();
+            const res = await response.json();
+            return res.playerName;
         }
         catch (error) {
             console.error('Error giving winning player point:', error);
@@ -584,6 +585,31 @@ async function removeWinningCardFromPlayer(cardId){
     }
     catch (error) {
         console.error('Error removing winning card from player:', error);
+        throw error;
+    }
+}
+
+async function getplayerName(playerId) {
+    try {
+        const url = new URL('/getPlayerName', window.location.origin);
+        url.searchParams.append('playerId', playerId);
+
+        const response = await fetch(url, {
+            method: 'GET',
+            headers: {
+                'Accept': 'application/json'
+            },
+        });
+
+        if (!response.ok) {
+            throw new Error(`HTTP error! status: ${response.status}`);
+        }
+
+        const res = await response.json();
+        return res.playerName;
+    }
+    catch (error) {
+        console.error('Error getting player name:', error);
         throw error;
     }
 }
