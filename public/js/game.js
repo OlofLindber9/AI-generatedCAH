@@ -60,8 +60,11 @@ gameSocket.on('showWinningPlayer', async function(winningPlayerName) {
             const cardID = card.getAttribute('data-cardId');
             const winningPlayerID = await giveWinningPlayerPoint(cardID);
             const winningPlayerName = await getplayerName(winningPlayerID);
-            await removeWinningCardFromPlayer(cardID);
-            await incrementRoundNumber(currentLobby);
+            await Promise.all([
+                removeWinningCardFromPlayer(cardID),
+                incrementRoundNumber(currentLobby),
+                removePlayedCards(currentLobby)
+            ]);
             gameSocket.emit('showWinningPlayer', { roomId: sessionStorage.getItem('roomId'), winningPlayerName: winningPlayerName });
             this.classList.add('green');
             playCardButton.textContent = 'card chosen';
@@ -419,6 +422,30 @@ gameSocket.on('showWinningPlayer', async function(winningPlayerName) {
         }
     }
 
+    async function removePlayedCards(lobbyId) {
+        try {
+            const url = new URL('/removePlayedCards', window.location.origin);
+            const data = {
+                lobbyId: lobbyId
+            };
+            const response = await fetch(url, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(data)
+            });
+            if (!response.ok) {
+                throw new Error(`HTTP error! status: ${response.status}`);
+            }
+            return response.json();
+        }
+        catch (error) {
+            console.error('Error removing played cards:', error);
+            throw error;
+        }
+    }
+
     async function getRoundNumber(lobbyId) {
         try {
             const url = new URL('/getRoundNumber', window.location.origin);
@@ -699,7 +726,7 @@ async function incrementRoundNumber(lobbyId) {
         confetti.style.animationDelay = (Math.random() * 2) + 's';
         confettiContainer.appendChild(confetti);
     }
-    
+
     if(isCzar){
         removeCzarStatus(sessionStorage.getItem('playerID'));
     }
