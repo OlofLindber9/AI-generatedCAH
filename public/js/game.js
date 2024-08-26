@@ -6,8 +6,8 @@ const cardVerticalPositions = [0, -6, 5, -13, 13, -17, 17, 24, 28];
 const playCardButton = document.getElementById('playCard');
 let cardsSelected = false;  
 const roundNumber = await getRoundNumber(sessionStorage.getItem('lobbyID'));
-console.log(roundNumber);
-await makeCzar(roundNumber, sessionStorage.getItem('lobbyID'));  
+await makeCzar(roundNumber, sessionStorage.getItem('lobbyID'));
+const currentLobby = sessionStorage.getItem('lobbyID');
 const isCzar = await getIfCzar(sessionStorage.getItem('playerID')); 
 const CzarMessage = document.getElementById('CzarMessage');
 
@@ -46,6 +46,7 @@ gameSocket.on('showWinningPlayer', async function(winningPlayerName) {
         CzarMessage.style.display = 'block';
         playCardButton.textContent = 'Choose card';
         playCardButton.classList.add('disabled');
+
         playCardButton.addEventListener('click', async function() {
             if (this.classList.contains('green')) {
                 showPopup('You have already chosen a winning card');
@@ -60,6 +61,7 @@ gameSocket.on('showWinningPlayer', async function(winningPlayerName) {
             const winningPlayerID = await giveWinningPlayerPoint(cardID);
             const winningPlayerName = await getplayerName(winningPlayerID);
             await removeWinningCardFromPlayer(cardID);
+            await incrementRoundNumber(currentLobby);
             gameSocket.emit('showWinningPlayer', { roomId: sessionStorage.getItem('roomId'), winningPlayerName: winningPlayerName });
             this.classList.add('green');
             playCardButton.textContent = 'card chosen';
@@ -75,7 +77,7 @@ gameSocket.on('showWinningPlayer', async function(winningPlayerName) {
     const darkCard = document.getElementById('darkCard');
     const pinvElement = darkCard.querySelector('.pinv');
     if (pinvElement) {
-        pinvElement.textContent = darkCardTexts[0];
+        pinvElement.textContent = darkCardTexts[roundNumber - 1];
         pinvElement.style.color = 'white';
     }
     
@@ -493,6 +495,31 @@ gameSocket.on('showWinningPlayer', async function(winningPlayerName) {
         }
     }
 
+    async function removeCzarStatus(playerId) {
+        try {
+            const url = new URL('/removeCzarStatus', window.location.origin);
+            const data = {
+                playerId: playerId
+            };
+            const response = await fetch(url, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(data)
+            });
+            if (!response.ok) {
+                throw new Error(`HTTP error! status: ${response.status}`);
+            }
+    
+            return response.json();
+        }
+        catch (error) {
+            console.error('Error removing Czar status:', error);
+            throw error;
+        }
+    }
+
     async function updatePlayer(playerId, field, value) {
         try {
             const response = await fetch('/updatePlayer', {
@@ -618,6 +645,31 @@ async function getplayerName(playerId) {
     }
 }
 
+async function incrementRoundNumber(lobbyId) {
+    try {
+        const url = new URL('/incrementRoundNumber', window.location.origin);
+        const data = {
+            lobbyId: lobbyId
+        };
+        const response = await fetch(url, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(data)
+        });
+        if (!response.ok) {
+            throw new Error(`HTTP error! status: ${response.status}`);
+        }
+
+        return response.json();
+    }
+    catch (error) {
+        console.error('Error incrementing round number:', error);
+        throw error;
+    }
+}
+
     function showPopup(text) {
         var popup = document.getElementById('popup');
         popup.textContent = text;
@@ -647,6 +699,10 @@ async function getplayerName(playerId) {
         confetti.style.animationDelay = (Math.random() * 2) + 's';
         confettiContainer.appendChild(confetti);
     }
+    
+    if(isCzar){
+        removeCzarStatus(sessionStorage.getItem('playerID'));
+    }
 
     // Show the modal
     modal.style.display = 'block';
@@ -655,5 +711,6 @@ async function getplayerName(playerId) {
     setTimeout(() => {
         modal.style.display = 'none';
         confettiContainer.innerHTML = ''; // Clear confetti for next time
+        window.location.href = '/game-start';
     }, 7000);
     }
