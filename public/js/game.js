@@ -8,8 +8,10 @@ let cardsSelected = false;
 const roundNumber = await getRoundNumber(sessionStorage.getItem('lobbyID'));
 await makeCzar(roundNumber, sessionStorage.getItem('lobbyID'));
 const currentLobby = sessionStorage.getItem('lobbyID');
-const isCzar = await getIfCzar(sessionStorage.getItem('playerID')); 
+const isCzar = await getIfCzar(sessionStorage.getItem('playerID'));
+const amountOfPlayers = await getAmountOfPlayers(currentLobby) 
 const CzarMessage = document.getElementById('CzarMessage');
+let gameOver = false;
 
 
 const gameSocket = io();
@@ -63,8 +65,10 @@ gameSocket.on('showWinningPlayer', async function(winningPlayerName) {
             await Promise.all([
                 removeWinningCardFromPlayer(cardID),
                 incrementRoundNumber(currentLobby),
-                removePlayedCards(currentLobby)
+                removePlayedCards(currentLobby),
             ]);
+            console.log(`amountOfPlayers ${amountOfPlayers}`);
+            console.log(`Roundnumber ${roundNumber}`);
             gameSocket.emit('showWinningPlayer', { roomId: sessionStorage.getItem('roomId'), winningPlayerName: winningPlayerName });
             this.classList.add('green');
             playCardButton.textContent = 'card chosen';
@@ -571,7 +575,6 @@ gameSocket.on('showWinningPlayer', async function(winningPlayerName) {
             // Append the playerId as a query parameter in the URL
             const url = new URL('/getPlayersFromLobby', window.location.origin);
             url.searchParams.append('lobbyId', lobbyId);
-            console.log(lobbyId)
     
             const response = await fetch(url, {
                 method: 'GET', // GET request
@@ -590,6 +593,31 @@ gameSocket.on('showWinningPlayer', async function(winningPlayerName) {
                 statuses.push(player.playerData.status);
             });
             return statuses;  // Return the data received from the server
+        }
+        catch (error) {
+            console.error('Error getting player:', error);
+            throw error;
+        }
+    }
+
+    async function getAmountOfPlayers(lobbyId) {
+        try {
+            // Append the playerId as a query parameter in the URL
+            const url = new URL('/getPlayersFromLobby', window.location.origin);
+            url.searchParams.append('lobbyId', lobbyId);
+    
+            const response = await fetch(url, {
+                method: 'GET', // GET request
+                headers: {
+                    'Accept': 'application/json' // Accept header for expecting JSON data
+                }
+            });
+    
+            if (!response.ok) {
+                throw new Error(`HTTP error! status: ${response.status}`);
+            }
+            const data = await response.json();
+            return data.players.length;  // Return the data received from the server
         }
         catch (error) {
             console.error('Error getting player:', error);
@@ -738,6 +766,13 @@ async function incrementRoundNumber(lobbyId) {
     setTimeout(() => {
         modal.style.display = 'none';
         confettiContainer.innerHTML = ''; // Clear confetti for next time
+        if(roundNumber === amountOfPlayers){
+            gameOver = true;
+        }
+        if(gameOver){
+            window.location.href = '/game-summary';
+        }else{
         window.location.href = '/game-start';
+        }
     }, 7000);
     }

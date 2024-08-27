@@ -1,22 +1,27 @@
 {>"layout" /}
 
+{<styles}
+<link rel="stylesheet" href="/css/gameSummary.css">
+{/styles}
+
 {<body}
 
     <div class="nav">
         <h2>AI-generatedCAH</h2>
         <div class="menu">
-            <a href="/lobby">
-                <p>back to lobby</p>
-            </a>
             <a href="/">
-                <p>leave the game</p>
+                <p>home</p>
             </a>
         </div>
     </div>
       
       <div class="hero">
         <div class="hero-text">
-          <h1>GAME SUMMARY</h1>
+          <h1>Game Summary</h1>
+            <div id="player-list">
+              <h3>Players:</h3>
+              <ul id="players"></ul>
+          </div>
         </div>
         <div class="blob-cont">
           <div class="first blob"></div>
@@ -24,21 +29,7 @@
           <div class="third blob"></div>
         </div>
       </div>
-      
-      
-      
-      
-      
-      
-      
-      
-      
-      
-      
-      
-      
-      
-      
+
       
       <svg>
         <filter id='noiseFilter'>
@@ -55,3 +46,7 @@
 
 
 {/body}
+
+{<scripts}
+    <script type="module" src="/js/gameSummary.js"></script>
+{/scripts}
