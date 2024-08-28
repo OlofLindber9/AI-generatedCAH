@@ -186,6 +186,7 @@
     padding: 1em 3em;
     border: 1px solid var(--text);
     font-size: 18px;
+    margin-left: 15em;
     }
     
     .button.disabled {

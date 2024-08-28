@@ -119,6 +119,7 @@ submitButton.addEventListener("click", async function() {
             if (data) {
                 const lobbyId = data.lobby;
                 console.log('lobbyID:', lobbyId);
+                sessionStorage.setItem('lobbyID', lobbyId);
                 createPlayer(name, [], 0, false, false, lobbyId, "AWAITING START").then(data => {
                     const playerId = data.playerID;
                     sessionStorage.setItem('playerID', playerId);

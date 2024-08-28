@@ -9,7 +9,7 @@
     <div class="nav">
         <h2>AI-generatedCAH</h2>
         <div class="menu">
-            <a href="/">
+            <a href="/" id="leaveGameLink">
                 <p>leave the game</p>
             </a>
         </div>
