@@ -32,6 +32,7 @@ background-color: var(--bg);
 font-family: "Recoleta";
 
 margin: 0 10em;
+overflow: hidden;
 }
 
 h1 {

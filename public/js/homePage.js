@@ -64,9 +64,9 @@ rulesButton.addEventListener('click', (e) => {
     // Set the modal text
     modalText.innerHTML  = `
     <p>WELCOME TO AI-GENERATED CARDS AGAINST HUMANITY!</p>
-    <p>This game is just as the original Cards Against Humanity but with a twist.</p>
-    <p>In this version of the game players are allowed to generate their own cards. From themes chosen by the player an AI-model will generate the cards.</p>
-    <p>Each player will generate two cards before each round</p>
+    <p>This game is just like the original Cards Against Humanity but with a twist.</p>
+    <p>In this version of the game, players are allowed to generate their own cards. From themes chosen by the player an AI-model will generate the cards.</p>
+    <p>Each player will generate two cards before each round.</p>
     <p>Note that the themes can be anything (things, feelings, names of friends or celebrities) so get creative!</p>
     <p>Feel free to create a Room and share the Room ID with your friends!</p>
 `;
