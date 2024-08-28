@@ -8,8 +8,9 @@
 
     <div class="nav">
         <h2>AI-generatedCAH</h2>
-        <div class="centered-container">
+        <div class="centered-container" id="centered-container">
           <h2 class="Czar-message" id="CzarMessage">Waiting for players to play their card</h2>
+          <div class="loader" id="loader"></div>
         </div>
         <div class="menu">
               <p class="roundCounter" id="roundCounter">RoundCount</p>
@@ -74,7 +75,6 @@
         </filter>
         
       </svg>
-
 
 {/body}
 

@@ -5,14 +5,17 @@ const cardHorizontalPositions = [40, 40, 40.6, 37.9, 37.9, 35, 37.5, 32, 29];
 const cardVerticalPositions = [0, -6, 5, -13, 13, -17, 17, 24, 28];
 const playCardButton = document.getElementById('playCard');
 const roundCounter = document.getElementById('roundCounter');
-let cardsSelected = false;  
+let cardsSelected = false; 
+const loader = document.getElementById('loader');
+//_________________________________ADD LOADING ANIMATION_____________________________________________________
+const CzarMessage = document.getElementById('CzarMessage');
+
 const roundNumber = await getRoundNumber(sessionStorage.getItem('lobbyID'));
 await makeCzar(roundNumber, sessionStorage.getItem('lobbyID'));
 const currentLobby = sessionStorage.getItem('lobbyID');
 const isCzar = await getIfCzar(sessionStorage.getItem('playerID'));
 const amountOfPlayers = await getAmountOfPlayers(currentLobby) 
 roundCounter.textContent = `Round ${roundNumber} of  ${amountOfPlayers}`;
-const CzarMessage = document.getElementById('CzarMessage');
 let gameOver = false;
 
 
@@ -47,6 +50,8 @@ gameSocket.on('showWinningPlayer', async function(winningPlayerName) {
 //document.addEventListener('DOMContentLoaded', async function () {
     const darkCardTexts =  await getDarkCardTexts(sessionStorage.getItem('lobbyID'));
     if(isCzar){
+        loader.style.display = 'none';
+        //_________________________________REMOVE LOADING ANIMATION_____________________________________________________
         CzarMessage.style.display = 'block';
         playCardButton.textContent = 'Choose card';
         playCardButton.classList.add('disabled');
@@ -79,7 +84,10 @@ gameSocket.on('showWinningPlayer', async function(winningPlayerName) {
         await updatePlayer(sessionStorage.getItem('playerID'), 'status', 'CZAR');
     }
     if(!isCzar){
+        //_________________________________REMOVE LOADING ANIMATION_____________________________________________________ 
+        CzarMessage.style.display = 'none';
         await makeCards();
+        loader.style.display = 'none';
         const cards = document.querySelectorAll('.hand .card');
     }
 
