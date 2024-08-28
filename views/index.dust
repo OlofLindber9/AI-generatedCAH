@@ -1,26 +1,30 @@
 {>"layout" /}
 
+{<styles}
+<link rel="stylesheet" href="/css/homePage.css">
+{/styles}
+
 {<body}
 
     <div class="nav">
-        <h2>AI-generatedCAH</h2>
         <div class="menu">
+          <img src="/images/logo.png" alt="logo" class="logo">
           <input type="text" id="nickInput" placeholder="Nickname">
             <a href="/lobby" id="createRoomLink">
-                <p>Create Room</p>
+                Create Room
             </a>
             <a href="/join-room">
-                <p>Join Game</p>
+                Join Game
             </a>
-            <a id="rulesLink">
-                <p>Rules</p>
+            <a href="#" id="rulesLink">
+                How does it work?
             </a>
         </div>
     </div>
       
       <div class="hero">
         <div class="hero-text">
-          <h1>HOME PAGE</h1> 
+          <h1>AI-generated Cards Against Humanity</h1> 
           
         </div>
         <div class="blob-cont">
@@ -29,6 +33,16 @@
           <div class="third blob"></div>
         </div>
         <div id="popup" class="popup"></div>
+          <!-- Modal -->
+          <div id="modal" class="modal">
+            <div class="modal-content">
+              <div class="modalBorder"></div>
+              <div class="modalFilter"></div>
+              <div id="modal-text"></div>
+              <div class="modalShadow"></div>
+              <div class="modalBackdrop"></div>
+            </div>
+        </div>
       </div>
       
       

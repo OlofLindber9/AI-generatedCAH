@@ -8,8 +8,8 @@ if (leaveGameLink) {
 //___________________________________________FIX STATUS IN LOBBY______READY/AWAITING START___________________________FOR BOTH PLAYERS AND LOBBY
 console.log(sessionStorage.getItem('isHost'));
 if (sessionStorage.getItem('isHost') === 'false') {
-    console.log('Disabling start game button');
     startGameButton.classList.add('disabled');
+    startGameButton.textContent = 'Waiting for host';
     startGameButton.removeAttribute('href'); // Disable link for non-hosts
 } else {
     startGameButton.addEventListener('click', (event) => {

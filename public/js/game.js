@@ -4,12 +4,14 @@ const cardRotations = [-87, -78, -96, -69, -105, -60, -114, -123, -132];
 const cardHorizontalPositions = [40, 40, 40.6, 37.9, 37.9, 35, 37.5, 32, 29];
 const cardVerticalPositions = [0, -6, 5, -13, 13, -17, 17, 24, 28];
 const playCardButton = document.getElementById('playCard');
+const roundCounter = document.getElementById('roundCounter');
 let cardsSelected = false;  
 const roundNumber = await getRoundNumber(sessionStorage.getItem('lobbyID'));
 await makeCzar(roundNumber, sessionStorage.getItem('lobbyID'));
 const currentLobby = sessionStorage.getItem('lobbyID');
 const isCzar = await getIfCzar(sessionStorage.getItem('playerID'));
 const amountOfPlayers = await getAmountOfPlayers(currentLobby) 
+roundCounter.textContent = `Round ${roundNumber} of  ${amountOfPlayers}`;
 const CzarMessage = document.getElementById('CzarMessage');
 let gameOver = false;
 

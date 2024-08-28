@@ -34,6 +34,13 @@ html, body {
   width: 100%; /* Ensures it stretches across screen, modify as needed */
   text-align: center; /* Centers the text within the container */
 }
+
+.roundCounter{
+  white-space: pre;
+}
+.Czar-message:hover {
+  color: var(--text);
+}
 .card {
     width: 300px;
     height: 150px;

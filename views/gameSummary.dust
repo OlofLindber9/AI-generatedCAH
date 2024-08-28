@@ -7,7 +7,9 @@
 {<body}
 
     <div class="nav">
+      <a href="/" style="text-decoration: none; color: inherit;">
         <h2>AI-generatedCAH</h2>
+    </a>
         <div class="menu">
             <a href="/">
                 <p>home</p>

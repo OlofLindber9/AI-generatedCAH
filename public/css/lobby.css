@@ -24,28 +24,8 @@
     
     margin: 0 10em;
     }
-    
-    h1 {
-    font-size: 60px;
-    font-weight: normal;
-    margin: 0;
-    color: var(--text);
-    }
-    
-    h2 {
-    font-size: 32px;
-    color: var(--text);
-    }
-    
-    p {
-    font-size: 20px;
-    color: var(--text);
-    }
-    
-    a {
-    text-decoration: none;
-    color: inherit;
-    }
+
+
     
     body::before,
     body::after {

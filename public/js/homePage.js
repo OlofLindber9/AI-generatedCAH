@@ -1,5 +1,5 @@
 const createRoomLink = document.getElementById('createRoomLink');
-const TESTBUTTON = document.getElementById("rulesLink");
+const rulesButton = document.getElementById("rulesLink");
 const homeSocket = io();
 homeSocket.on('connect', function() {
     console.log('Connected to homepage namespace');
@@ -57,8 +57,27 @@ createRoomLink.addEventListener('click', (e) => {
     .catch(error => console.error('Error creating player:', error));
 });
 
-TESTBUTTON.addEventListener('click', (e) => {
-    console.log(roomId);
+rulesButton.addEventListener('click', (e) => {
+    const modal = document.getElementById('modal');
+    const modalText = document.getElementById('modal-text');
+
+    // Set the modal text
+    modalText.innerHTML  = `
+    <p>WELCOME TO AI-GENERATED CARDS AGAINST HUMANITY!</p>
+    <p>This game is just as the original Cards Against Humanity but with a twist.</p>
+    <p>In this version of the game players are allowed to generate their own cards. From themes chosen by the player an AI-model will generate the cards.</p>
+    <p>Each player will generate two cards before each round</p>
+    <p>Note that the themes can be anything (things, feelings, names of friends or celebrities) so get creative!</p>
+    <p>Feel free to create a Room and share the Room ID with your friends!</p>
+`;
+    // Show the modal
+    modal.style.display = 'block';
+});
+
+document.getElementById('modal').addEventListener('click', function(event) {
+    if (event.target === this) {
+        this.style.display = 'none';
+    }
 });
 
 function showPopup(text) {

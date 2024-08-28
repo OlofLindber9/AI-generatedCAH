@@ -10,9 +10,6 @@
     <div class="nav">
         <h2>AI-generatedCAH</h2>
         <div class="menu">
-            <a id="tempButton">
-                <p>button</p>
-            </a>
         </div>
     </div>
       
